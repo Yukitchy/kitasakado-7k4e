@@ -7,7 +7,8 @@
 <title>北坂戸ラジオ（仮）第0回</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family:"Hiragino Sans","Noto Sans JP",sans-serif; background:#faf7f2; color:#2b2b2b; line-height:1.75; padding:28px 16px 90px; }
+  body { font-family:"Hiragino Sans","Noto Sans JP",sans-serif; background:#faf7f2; color:#2b2b2b; line-height:1.75; padding:28px 16px 90px;
+    word-break:auto-phrase; line-break:strict; text-wrap:pretty; }
   .wrap { max-width:640px; margin:0 auto; }
   h1 { font-size:21px; font-weight:800; }
   .sub { color:#8a8378; font-size:13px; margin:4px 0 26px; }
@@ -17,12 +18,13 @@
   .note { font-size:12px; color:#8a8378; margin:8px 0 34px; }
   h2 { font-size:16px; font-weight:800; color:#3d3830; margin:30px 0 6px; padding-left:12px; border-left:5px solid #d8552b; }
   .lead { font-size:13px; color:#6b6355; margin-bottom:16px; }
-  .card { background:#fff; border:1px solid #e8e2d8; border-radius:16px; padding:18px; margin-bottom:16px; }
+  .list { display:grid; grid-template-columns:1fr; gap:12px; }
+  @media (min-width:560px) { .list { grid-template-columns:1fr 1fr; } }
+  .card { background:#fff; border:1px solid #e8e2d8; border-radius:16px; padding:16px 18px; }
   .tag { display:inline-block; width:28px; height:28px; border-radius:50%; background:#2b2b2b; color:#fff; font-weight:800; font-size:14px; text-align:center; line-height:28px; margin-right:8px; }
   .name { font-size:17px; font-weight:800; }
-  .yomi { font-size:12px; color:#8a8378; margin:2px 0 10px 36px; }
-  .card img { width:100%; border-radius:12px; border:1px solid #efe9df; }
-  .why { font-size:13px; color:#4a453d; margin-top:10px; }
+  .yomi { font-size:12px; color:#8a8378; margin:2px 0 0 36px; }
+  .why { font-size:13px; color:#4a453d; margin-top:9px; }
   .vote { background:#fff7f3; border:2px solid #d8552b; border-radius:16px; padding:18px; margin-top:30px; font-size:14px; }
   .vote b { color:#d8552b; }
 </style>
@@ -30,7 +32,7 @@
 <body>
 <div class="wrap">
   <h1>北坂戸ラジオ（仮）</h1>
-  <p class="sub">2026-08-18 バーミヤン北坂戸で収録した第0回。まず聴いて、下の5案から番組名を選んでください。</p>
+  <p class="sub">2026-08-18 バーミヤン北坂戸で収録した第0回。まず聴いて、下の10案から番組名を選んでください。</p>
 
   <div class="player">
     <div class="label">▶ 第0回（32分・BGM付き自動編集済み）</div>
@@ -38,42 +40,71 @@
   </div>
   <p class="note">※このページはURLを知っている3人だけの共有用です。拡散はしないでください。</p>
 
-  <h2>番組名＋ロゴ 5案</h2>
-  <p class="lead">ロゴはそのままSpotifyのカバー画像に使える本番品質で作ってあります。</p>
+  <h2>番組名 10案</h2>
+  <p class="lead">まず名前の方向だけ決めます。ロゴは決まってから、その名前に合わせて作ります。</p>
+
+  <div class="list">
 
   <div class="card">
     <span class="tag">A</span><span class="name">北坂戸ラジオ</span>
-    <div class="yomi">きたさかどらじお</div>
-    <img src="img/logo1.png" alt="A案ロゴ: 駅名標デザイン" loading="lazy">
-    <p class="why">ど直球の地名タイトル。ロゴは東上線の駅名標。隣駅は実在の「さかど」「たかさか」。</p>
+    <div class="yomi">きたさかど らじお</div>
+    <p class="why">ど直球の地名タイトル。説明が要らないぶん、いちばん長持ちする。</p>
   </div>
 
-    <div class="card">
-    <span class="tag">B</span><span class="name">北坂戸1989</span>
+  <div class="card">
+    <span class="tag">B</span><span class="name">月刊北坂戸</span>
+    <div class="yomi">げっかん きたさかど</div>
+    <p class="why">月1収録をそのまま名前に。雑誌みたいな響きで、続きものらしさが出る。</p>
+  </div>
+
+  <div class="card">
+    <span class="tag">C</span><span class="name">だいたい北坂戸</span>
+    <div class="yomi">だいたい きたさかど</div>
+    <p class="why">月1と言いつつズレる前提を、先に自分たちで白状しておく名前。</p>
+  </div>
+
+  <div class="card">
+    <span class="tag">D</span><span class="name">今夜も北坂戸</span>
+    <div class="yomi">こんやも きたさかど</div>
+    <p class="why">夜に集まって喋っている感じが出る。「も」が回を重ねる前提を含んでいる。</p>
+  </div>
+
+  <div class="card">
+    <span class="tag">E</span><span class="name">北坂戸に集合</span>
+    <div class="yomi">きたさかどに しゅうごう</div>
+    <p class="why">3人が集まること自体が中身、という作り。企画がなくても成立する。</p>
+  </div>
+
+  <div class="card">
+    <span class="tag">F</span><span class="name">帰ってきた北坂戸</span>
+    <div class="yomi">かえってきた きたさかど</div>
+    <p class="why">地元を離れた3人が戻ってくる構図。毎回が「帰省」になる。</p>
+  </div>
+
+  <div class="card">
+    <span class="tag">G</span><span class="name">北坂戸帰宅部</span>
+    <div class="yomi">きたさかど きたくぶ</div>
+    <p class="why">部活ノリ。何もしない部という意味なので、雑談番組と相性がいい。</p>
+  </div>
+
+  <div class="card">
+    <span class="tag">H</span><span class="name">北坂戸定例会</span>
+    <div class="yomi">きたさかど ていれいかい</div>
+    <p class="why">月1の会合という体。淡々としていて、義務っぽさが逆に続けやすい。</p>
+  </div>
+
+  <div class="card">
+    <span class="tag">I</span><span class="name">北坂戸サミット</span>
+    <div class="yomi">きたさかど さみっと</div>
+    <p class="why">大げさに言うほうの笑い。実態はバーミヤンの3人、というギャップが効く。</p>
+  </div>
+
+  <div class="card">
+    <span class="tag">J</span><span class="name">北坂戸1989</span>
     <div class="yomi">きたさかど いちきゅうはちきゅう</div>
-    <img src="img/logo6.png" alt="B案ロゴ: 北坂戸1989" loading="lazy">
-    <p class="why">3人とも平成元年＝1989年生まれ。地元と生まれ年だけで名乗る、いちばんシンプルで強い記号。</p>
+    <p class="why">3人とも平成元年＝1989年生まれ。地元と生まれ年だけで名乗る記号。</p>
   </div>
 
-  <div class="card">
-    <span class="tag">C</span><span class="name">FM北坂戸</span>
-    <div class="yomi">えふえむ きたさかど</div>
-    <img src="img/logo7.png" alt="C案ロゴ: FM北坂戸" loading="lazy">
-    <p class="why">存在しないコミュニティFM局を名乗るスタイル。周波数89.0MHz（自称）は1989年生まれから。</p>
-  </div>
-
-  <div class="card">
-    <span class="tag">D</span><span class="name">月イチ北坂戸</span>
-    <div class="yomi">つきいちきたさかど</div>
-    <img src="img/logo4.png" alt="D案ロゴ: カレンダーデザイン" loading="lazy">
-    <p class="why">月1収録の宣言タイトル。カレンダーに赤丸ひとつ。サボると聴いてる人にバレる仕組み。</p>
-  </div>
-
-  <div class="card">
-    <span class="tag">E</span><span class="name">北坂戸倶楽部</span>
-    <div class="yomi">きたさかどくらぶ</div>
-    <img src="img/logo8.png" alt="E案ロゴ: エンブレムデザイン" loading="lazy">
-    <p class="why">紳士の社交場風エンブレム（EST. 1989）。実態はバーミヤン。そのギャップごと楽しむ案。</p>
   </div>
 
   <div class="vote">
