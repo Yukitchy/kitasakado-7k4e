@@ -61,6 +61,26 @@
   textarea:focus,input[type=text]:focus{outline:none;border-color:var(--red);}
   textarea{min-height:100px;}
 
+  .cal{background:var(--card);border:2px solid var(--line);border-radius:12px;padding:14px 12px;margin-bottom:10px;}
+  .cal h3{font-size:14px;font-weight:800;text-align:center;margin-bottom:10px;}
+  .cal table{width:100%;border-collapse:collapse;table-layout:fixed;}
+  .cal th{font-size:11px;color:var(--sub);font-weight:700;padding-bottom:6px;}
+  .cal th.sun,.cal button.sun{color:#c0453a;}
+  .cal th.sat,.cal button.sat{color:#3f6fb0;}
+  .cal td{padding:2px;text-align:center;}
+  .cal button{
+    width:100%;height:38px;border:none;background:none;border-radius:50%;
+    font-family:inherit;font-size:15px;font-weight:700;color:var(--ink);cursor:pointer;
+  }
+  .cal button:disabled{color:#d5cfc5;cursor:default;}
+  .cal button.on,.cal button.on.sat,.cal button.on.sun{background:var(--red);color:#fff;}
+  .picked{
+    font-size:14px;font-weight:700;color:var(--ink);
+    background:#fff7f3;border:2px solid var(--line);border-radius:12px;
+    padding:12px 14px;margin-bottom:10px;
+  }
+  .picked.none{color:var(--sub);font-weight:400;background:var(--card);}
+
   .copybox{
     background:var(--card);border:2px solid var(--red);border-radius:16px;
     padding:20px;text-align:center;
@@ -96,7 +116,7 @@
     <div class="who">
       <button type="button" data-name="タクマ" aria-pressed="false">タクマ</button>
       <button type="button" data-name="大場先生" aria-pressed="false">大場先生</button>
-      <button type="button" data-name="イッちゃん" aria-pressed="false">イッちゃん</button>
+      <button type="button" data-name="いっちゃん" aria-pressed="false">いっちゃん</button>
     </div>
   </section>
 
@@ -105,15 +125,15 @@
     <p class="lead">回のタイトル（番組名は「坂戸ベース」で決定）。ピンとこなければ一番下に書いて。</p>
     <div class="titles">
       <label><input type="radio" name="title" value="泉町3-6-1に基地ができた"><span class="n">1</span><span class="t">泉町3-6-1に基地ができた</span></label>
-      <label><input type="radio" name="title" value="帰ってくる口実、作りました"><span class="n">2</span><span class="t">帰ってくる口実、作りました</span></label>
+      <label><input type="radio" name="title" value="帰ってくる口実を作りました"><span class="n">2</span><span class="t">帰ってくる口実を作りました</span></label>
       <label><input type="radio" name="title" value="バーミヤンより開局のお知らせ"><span class="n">3</span><span class="t">バーミヤンより開局のお知らせ</span></label>
-      <label><input type="radio" name="title" value="開局初日、まず尿酸値の話"><span class="n">4</span><span class="t">開局初日、まず尿酸値の話</span></label>
-      <label><input type="radio" name="title" value="1989年組、月イチ集合"><span class="n">5</span><span class="t">1989年組、月イチ集合</span></label>
+      <label><input type="radio" name="title" value="開局初日から尿酸値の話"><span class="n">4</span><span class="t">開局初日から尿酸値の話</span></label>
+      <label><input type="radio" name="title" value="1989年組が月イチで集合"><span class="n">5</span><span class="t">1989年組が月イチで集合</span></label>
       <label><input type="radio" name="title" value="尿酸値と百名山98座"><span class="n">6</span><span class="t">尿酸値と百名山98座</span></label>
       <label><input type="radio" name="title" value="初回から健康の話しかしてない"><span class="n">7</span><span class="t">初回から健康の話しかしてない</span></label>
-      <label><input type="radio" name="title" value="坂戸ベース、開設"><span class="n">8</span><span class="t">坂戸ベース、開設</span></label>
+      <label><input type="radio" name="title" value="坂戸ベース開設"><span class="n">8</span><span class="t">坂戸ベース開設</span></label>
       <label><input type="radio" name="title" value="月イチで集まる理由ができた"><span class="n">9</span><span class="t">月イチで集まる理由ができた</span></label>
-      <label><input type="radio" name="title" value="北坂戸、集合。"><span class="n">10</span><span class="t">北坂戸、集合。</span></label>
+      <label><input type="radio" name="title" value="北坂戸に集合"><span class="n">10</span><span class="t">北坂戸に集合</span></label>
     </div>
     <input type="text" id="titleOwn" placeholder="自分で考えるならここに（任意）" style="margin-top:8px;">
   </section>
@@ -131,9 +151,11 @@
   </section>
 
   <section>
-    <h2>次のバーミヤン、いつ行ける？</h2>
-    <p class="lead">候補日でも「土日ならだいたい」でもOK。</p>
-    <input type="text" id="date" placeholder="例：9月の第3土曜あたりなら空いてる">
+    <h2>次のバーミヤンいつ行ける？</h2>
+    <p class="lead">行ける日を全部タップ（何日でもOK・もう一度押すと解除）。</p>
+    <div id="picked" class="picked none">まだ選んでません</div>
+    <div id="cals"></div>
+    <input type="text" id="dateNote" placeholder="補足があれば（例：夜なら何日でもいける）">
   </section>
 
   <div class="copybox">
@@ -152,9 +174,71 @@
     titleOwn: document.getElementById('titleOwn'),
     feedback: document.getElementById('feedback'),
     neta:     document.getElementById('neta'),
-    date:     document.getElementById('date')
+    dateNote: document.getElementById('dateNote')
   };
   var whoBtns = document.querySelectorAll('.who button');
+  var WD = ['日','月','火','水','木','金','土'];
+  var picked = [];
+
+  function pad(n){ return n < 10 ? '0' + n : '' + n; }
+
+  function label(iso){
+    var p = iso.split('-');
+    var d = new Date(+p[0], +p[1] - 1, +p[2]);
+    return (+p[1]) + '/' + (+p[2]) + '(' + WD[d.getDay()] + ')';
+  }
+
+  function renderPicked(){
+    var box = document.getElementById('picked');
+    if (!picked.length){
+      box.textContent = 'まだ選んでません';
+      box.className = 'picked none';
+    } else {
+      box.textContent = picked.slice().sort().map(label).join('  ');
+      box.className = 'picked';
+    }
+  }
+
+  function buildCal(){
+    var host = document.getElementById('cals');
+    var today = new Date(); today.setHours(0,0,0,0);
+    for (var m = 0; m < 3; m++){
+      var d = new Date(today.getFullYear(), today.getMonth() + m, 1);
+      var y = d.getFullYear(), mo = d.getMonth();
+      var head = '<tr>' + WD.map(function(w,i){
+        return '<th class="' + (i===0?'sun':i===6?'sat':'') + '">' + w + '</th>';
+      }).join('') + '</tr>';
+      var cells = [];
+      var first = new Date(y, mo, 1).getDay();
+      var days  = new Date(y, mo + 1, 0).getDate();
+      for (var i = 0; i < first; i++) cells.push('<td></td>');
+      for (var day = 1; day <= days; day++){
+        var cur = new Date(y, mo, day);
+        var wd = cur.getDay();
+        var iso = y + '-' + pad(mo + 1) + '-' + pad(day);
+        cells.push('<td><button type="button" data-d="' + iso + '" class="' +
+          (wd===0?'sun':wd===6?'sat':'') + '"' + (cur < today ? ' disabled' : '') +
+          '>' + day + '</button></td>');
+      }
+      while (cells.length % 7) cells.push('<td></td>');
+      var rows = '';
+      for (var j = 0; j < cells.length; j += 7) rows += '<tr>' + cells.slice(j, j+7).join('') + '</tr>';
+      var wrap = document.createElement('div');
+      wrap.className = 'cal';
+      wrap.innerHTML = '<h3>' + y + '年' + (mo + 1) + '月</h3><table>' + head + rows + '</table>';
+      host.appendChild(wrap);
+    }
+    host.addEventListener('click', function(e){
+      var b = e.target.closest('button[data-d]');
+      if (!b || b.disabled) return;
+      var iso = b.dataset.d;
+      var at = picked.indexOf(iso);
+      if (at >= 0) { picked.splice(at, 1); b.classList.remove('on'); }
+      else         { picked.push(iso);     b.classList.add('on'); }
+      renderPicked();
+      save();
+    });
+  }
 
   function state(){
     var t = document.querySelector('input[name=title]:checked');
@@ -165,7 +249,8 @@
       titleOwn: els.titleOwn.value,
       feedback: els.feedback.value,
       neta: els.neta.value,
-      date: els.date.value
+      dates: picked,
+      dateNote: els.dateNote.value
     };
   }
 
@@ -184,9 +269,16 @@
       var r = document.querySelector('input[name=title][value="' + s.title.replace(/"/g,'\\"') + '"]');
       if (r) r.checked = true;
     }
-    ['titleOwn','feedback','neta','date'].forEach(function(k){
+    ['titleOwn','feedback','neta','dateNote'].forEach(function(k){
       if (s[k]) els[k].value = s[k];
     });
+    if (Array.isArray(s.dates)) {
+      s.dates.forEach(function(iso){
+        var b = document.querySelector('button[data-d="' + iso + '"]');
+        if (b && !b.disabled) { picked.push(iso); b.classList.add('on'); }
+      });
+    }
+    renderPicked();
   }
 
   whoBtns.forEach(function(b){
@@ -207,7 +299,12 @@
     if (t)          lines.push('▼タイトルはこれ\n' + t);
     if (s.feedback) lines.push('▼感想\n' + s.feedback);
     if (s.neta)     lines.push('▼次回話したいネタ\n' + s.neta);
-    if (s.date)     lines.push('▼次いける日\n' + s.date);
+    if (s.dates && s.dates.length) {
+      lines.push('▼次いける日\n' + s.dates.slice().sort().map(label).join(' / ') +
+                 (s.dateNote ? '\n' + s.dateNote : ''));
+    } else if (s.dateNote) {
+      lines.push('▼次いける日\n' + s.dateNote);
+    }
     return lines.join('\n\n');
   }
 
@@ -240,6 +337,7 @@
     }
   });
 
+  buildCal();
   restore();
 })();
 </script>
