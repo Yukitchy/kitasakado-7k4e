@@ -62,7 +62,14 @@
   textarea{min-height:100px;}
 
   .cal{background:var(--card);border:2px solid var(--line);border-radius:12px;padding:14px 12px;margin-bottom:10px;}
-  .cal h3{font-size:14px;font-weight:800;text-align:center;margin-bottom:10px;}
+  .calnav{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+  .calnav h3{flex:1;font-size:15px;font-weight:800;text-align:center;margin:0;}
+  .calnav button{
+    width:40px;height:36px;flex-shrink:0;
+    border:2px solid var(--line);background:var(--card);border-radius:10px;
+    font-family:inherit;font-size:14px;color:var(--ink);cursor:pointer;
+  }
+  .calnav button:disabled{color:#dad4ca;border-color:#f1ede6;cursor:default;}
   .cal table{width:100%;border-collapse:collapse;table-layout:fixed;}
   .cal th{font-size:11px;color:var(--sub);font-weight:700;padding-bottom:6px;}
   .cal th.sun,.cal button.sun{color:#c0453a;}
@@ -199,36 +206,57 @@
     }
   }
 
+  var today = new Date(); today.setHours(0,0,0,0);
+  var viewY = today.getFullYear(), viewM = today.getMonth();
+  var MAX_AHEAD = 6;  // 今月から6ヶ月先まで
+
+  function monthOffset(){
+    return (viewY - today.getFullYear()) * 12 + (viewM - today.getMonth());
+  }
+
+  function renderCal(){
+    var host = document.getElementById('cals');
+    var head = '<tr>' + WD.map(function(w,i){
+      return '<th class="' + (i===0?'sun':i===6?'sat':'') + '">' + w + '</th>';
+    }).join('') + '</tr>';
+    var cells = [];
+    var first = new Date(viewY, viewM, 1).getDay();
+    var days  = new Date(viewY, viewM + 1, 0).getDate();
+    for (var i = 0; i < first; i++) cells.push('<td></td>');
+    for (var day = 1; day <= days; day++){
+      var cur = new Date(viewY, viewM, day);
+      var wd = cur.getDay();
+      var iso = viewY + '-' + pad(viewM + 1) + '-' + pad(day);
+      var cls = (wd===0?'sun':wd===6?'sat':'') + (picked.indexOf(iso) >= 0 ? ' on' : '');
+      cells.push('<td><button type="button" data-d="' + iso + '" class="' + cls + '"' +
+        (cur < today ? ' disabled' : '') + '>' + day + '</button></td>');
+    }
+    while (cells.length % 7) cells.push('<td></td>');
+    var rows = '';
+    for (var j = 0; j < cells.length; j += 7) rows += '<tr>' + cells.slice(j, j+7).join('') + '</tr>';
+    var off = monthOffset();
+    host.innerHTML =
+      '<div class="cal">' +
+        '<div class="calnav">' +
+          '<button type="button" id="prevM" aria-label="前の月"' + (off <= 0 ? ' disabled' : '') + '>◀</button>' +
+          '<h3>' + viewY + '年' + (viewM + 1) + '月</h3>' +
+          '<button type="button" id="nextM" aria-label="次の月"' + (off >= MAX_AHEAD ? ' disabled' : '') + '>▶</button>' +
+        '</div>' +
+        '<table>' + head + rows + '</table>' +
+      '</div>';
+  }
+
   function buildCal(){
     var host = document.getElementById('cals');
-    var today = new Date(); today.setHours(0,0,0,0);
-    for (var m = 0; m < 3; m++){
-      var d = new Date(today.getFullYear(), today.getMonth() + m, 1);
-      var y = d.getFullYear(), mo = d.getMonth();
-      var head = '<tr>' + WD.map(function(w,i){
-        return '<th class="' + (i===0?'sun':i===6?'sat':'') + '">' + w + '</th>';
-      }).join('') + '</tr>';
-      var cells = [];
-      var first = new Date(y, mo, 1).getDay();
-      var days  = new Date(y, mo + 1, 0).getDate();
-      for (var i = 0; i < first; i++) cells.push('<td></td>');
-      for (var day = 1; day <= days; day++){
-        var cur = new Date(y, mo, day);
-        var wd = cur.getDay();
-        var iso = y + '-' + pad(mo + 1) + '-' + pad(day);
-        cells.push('<td><button type="button" data-d="' + iso + '" class="' +
-          (wd===0?'sun':wd===6?'sat':'') + '"' + (cur < today ? ' disabled' : '') +
-          '>' + day + '</button></td>');
-      }
-      while (cells.length % 7) cells.push('<td></td>');
-      var rows = '';
-      for (var j = 0; j < cells.length; j += 7) rows += '<tr>' + cells.slice(j, j+7).join('') + '</tr>';
-      var wrap = document.createElement('div');
-      wrap.className = 'cal';
-      wrap.innerHTML = '<h3>' + y + '年' + (mo + 1) + '月</h3><table>' + head + rows + '</table>';
-      host.appendChild(wrap);
-    }
+    renderCal();
     host.addEventListener('click', function(e){
+      var nav = e.target.closest('#prevM,#nextM');
+      if (nav && !nav.disabled){
+        var d = new Date(viewY, viewM + (nav.id === 'nextM' ? 1 : -1), 1);
+        viewY = d.getFullYear(); viewM = d.getMonth();
+        renderCal();
+        return;
+      }
       var b = e.target.closest('button[data-d]');
       if (!b || b.disabled) return;
       var iso = b.dataset.d;
@@ -273,10 +301,11 @@
       if (s[k]) els[k].value = s[k];
     });
     if (Array.isArray(s.dates)) {
+      var todayIso = today.getFullYear() + '-' + pad(today.getMonth() + 1) + '-' + pad(today.getDate());
       s.dates.forEach(function(iso){
-        var b = document.querySelector('button[data-d="' + iso + '"]');
-        if (b && !b.disabled) { picked.push(iso); b.classList.add('on'); }
+        if (iso >= todayIso) picked.push(iso);
       });
+      renderCal();
     }
     renderPicked();
   }
