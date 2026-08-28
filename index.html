@@ -4,81 +4,244 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<title>北坂戸ラジオ（仮）第0回</title>
+<title>坂戸ベース 第1回</title>
 <style>
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family:"Hiragino Sans","Noto Sans JP",sans-serif; background:#faf7f2; color:#2b2b2b; line-height:1.75; padding:28px 16px 90px; }
-  .wrap { max-width:640px; margin:0 auto; }
-  h1 { font-size:21px; font-weight:800; }
-  .sub { color:#8a8378; font-size:13px; margin:4px 0 26px; }
-  .player { background:#fff; border:1px solid #e8e2d8; border-radius:16px; padding:20px; margin-bottom:8px; }
-  .player .label { font-size:14px; font-weight:800; margin-bottom:10px; }
-  audio { width:100%; }
-  .note { font-size:12px; color:#8a8378; margin:8px 0 34px; }
-  h2 { font-size:16px; font-weight:800; color:#3d3830; margin:30px 0 6px; padding-left:12px; border-left:5px solid #d8552b; }
-  .lead { font-size:13px; color:#6b6355; margin-bottom:16px; }
-  .card { background:#fff; border:1px solid #e8e2d8; border-radius:16px; padding:18px; margin-bottom:16px; }
-  .tag { display:inline-block; width:28px; height:28px; border-radius:50%; background:#2b2b2b; color:#fff; font-weight:800; font-size:14px; text-align:center; line-height:28px; margin-right:8px; }
-  .name { font-size:17px; font-weight:800; }
-  .yomi { font-size:12px; color:#8a8378; margin:2px 0 10px 36px; }
-  .card img { width:100%; border-radius:12px; border:1px solid #efe9df; }
-  .why { font-size:13px; color:#4a453d; margin-top:10px; }
-  .vote { background:#fff7f3; border:2px solid #d8552b; border-radius:16px; padding:18px; margin-top:30px; font-size:14px; }
-  .vote b { color:#d8552b; }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  :root{
+    --paper:#faf7f2; --ink:#2b2b2b; --sub:#8a8378; --line:#e8e2d8;
+    --red:#d8552b; --card:#fff;
+  }
+  body{
+    font-family:"Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+    background:var(--paper); color:var(--ink); line-height:1.75;
+    padding:26px 16px 40px; -webkit-text-size-adjust:100%;
+  }
+  .wrap{max-width:600px;margin:0 auto;}
+
+  header{text-align:center;margin-bottom:28px;}
+  h1{font-size:26px;font-weight:800;letter-spacing:.04em;}
+  .tagline{color:var(--sub);font-size:13px;margin-top:6px;}
+
+  .player{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;}
+  .player .label{font-size:14px;font-weight:800;margin-bottom:10px;}
+  audio{width:100%;}
+  .note{font-size:12px;color:var(--sub);margin:10px 2px 32px;}
+
+  h2{
+    font-size:16px;font-weight:800;margin:0 0 4px;
+    padding-left:12px;border-left:5px solid var(--red);
+  }
+  .lead{font-size:13px;color:var(--sub);margin:0 0 14px 12px;}
+  section{margin-bottom:34px;}
+
+  .who{display:flex;gap:10px;margin-bottom:6px;}
+  .who button{
+    flex:1;padding:14px 8px;font-size:15px;font-weight:800;font-family:inherit;
+    background:var(--card);color:var(--ink);
+    border:2px solid var(--line);border-radius:12px;cursor:pointer;
+  }
+  .who button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink);}
+
+  .titles{display:flex;flex-direction:column;gap:8px;}
+  .titles label{
+    display:flex;align-items:center;gap:12px;
+    background:var(--card);border:2px solid var(--line);border-radius:12px;
+    padding:13px 14px;cursor:pointer;
+  }
+  .titles label:has(input:checked){border-color:var(--red);background:#fff7f3;}
+  .titles input{accent-color:var(--red);width:18px;height:18px;flex-shrink:0;}
+  .titles .n{font-size:12px;color:var(--sub);font-weight:800;width:1.4em;flex-shrink:0;}
+  .titles .t{font-size:15px;font-weight:700;line-height:1.5;}
+
+  textarea,input[type=text]{
+    width:100%;font-family:inherit;font-size:16px;line-height:1.7;color:var(--ink);
+    background:var(--card);border:2px solid var(--line);border-radius:12px;
+    padding:13px 14px;resize:vertical;
+  }
+  textarea:focus,input[type=text]:focus{outline:none;border-color:var(--red);}
+  textarea{min-height:100px;}
+
+  .copybox{
+    background:var(--card);border:2px solid var(--red);border-radius:16px;
+    padding:20px;text-align:center;
+  }
+  .copybox p{font-size:13px;color:var(--sub);margin-bottom:14px;}
+  #copy{
+    width:100%;padding:17px;font-family:inherit;font-size:17px;font-weight:800;
+    background:var(--red);color:#fff;border:none;border-radius:12px;cursor:pointer;
+  }
+  #copy:active{opacity:.85;}
+  #copy.done{background:#3d8b52;}
+  .saved{font-size:12px;color:var(--sub);margin-top:12px;}
+  footer{text-align:center;font-size:12px;color:var(--sub);margin-top:36px;}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>北坂戸ラジオ（仮）</h1>
-  <p class="sub">2026-08-18 バーミヤン北坂戸で収録した第0回。まず聴いて、下の5案から番組名を選んでください。</p>
+
+  <header>
+    <h1>坂戸ベース</h1>
+    <p class="tagline">1989年生まれ・北坂戸の3人が月イチで集まる雑談ラジオ</p>
+  </header>
 
   <div class="player">
-    <div class="label">▶ 第0回（32分・BGM付き自動編集済み）</div>
+    <div class="label">▶ 第1回（32分・BGM入り編集済み）</div>
     <audio controls preload="none" src="ep0.mp3"></audio>
   </div>
-  <p class="note">※このページはURLを知っている3人だけの共有用です。拡散はしないでください。</p>
+  <p class="note">※このページはURLを知っている3人だけの共有用です。拡散はしないでください。<br>話した内容：自己紹介／健康診断と尿酸値／睡眠サイクル論争／百名山98座／インバウンド／地元の昔の名店</p>
 
-  <h2>番組名＋ロゴ 5案</h2>
-  <p class="lead">ロゴはそのままSpotifyのカバー画像に使える本番品質で作ってあります。</p>
+  <section>
+    <h2>まず、誰？</h2>
+    <p class="lead">押すと最後のコピー文に名前が入ります。</p>
+    <div class="who">
+      <button type="button" data-name="タクマ" aria-pressed="false">タクマ</button>
+      <button type="button" data-name="大場先生" aria-pressed="false">大場先生</button>
+      <button type="button" data-name="イッちゃん" aria-pressed="false">イッちゃん</button>
+    </div>
+  </section>
 
-  <div class="card">
-    <span class="tag">A</span><span class="name">北坂戸ラジオ</span>
-    <div class="yomi">きたさかどらじお</div>
-    <img src="img/logo1.png" alt="A案ロゴ: 駅名標デザイン" loading="lazy">
-    <p class="why">ど直球の地名タイトル。ロゴは東上線の駅名標。隣駅は実在の「さかど」「たかさか」。</p>
+  <section>
+    <h2>第1回のタイトル、どれがいい？</h2>
+    <p class="lead">回のタイトル（番組名は「坂戸ベース」で決定）。ピンとこなければ一番下に書いて。</p>
+    <div class="titles">
+      <label><input type="radio" name="title" value="泉町3-6-1に基地ができた"><span class="n">1</span><span class="t">泉町3-6-1に基地ができた</span></label>
+      <label><input type="radio" name="title" value="帰ってくる口実、作りました"><span class="n">2</span><span class="t">帰ってくる口実、作りました</span></label>
+      <label><input type="radio" name="title" value="バーミヤンより開局のお知らせ"><span class="n">3</span><span class="t">バーミヤンより開局のお知らせ</span></label>
+      <label><input type="radio" name="title" value="開局初日、まず尿酸値の話"><span class="n">4</span><span class="t">開局初日、まず尿酸値の話</span></label>
+      <label><input type="radio" name="title" value="1989年組、月イチ集合"><span class="n">5</span><span class="t">1989年組、月イチ集合</span></label>
+      <label><input type="radio" name="title" value="尿酸値と百名山98座"><span class="n">6</span><span class="t">尿酸値と百名山98座</span></label>
+      <label><input type="radio" name="title" value="初回から健康の話しかしてない"><span class="n">7</span><span class="t">初回から健康の話しかしてない</span></label>
+      <label><input type="radio" name="title" value="坂戸ベース、開設"><span class="n">8</span><span class="t">坂戸ベース、開設</span></label>
+      <label><input type="radio" name="title" value="月イチで集まる理由ができた"><span class="n">9</span><span class="t">月イチで集まる理由ができた</span></label>
+      <label><input type="radio" name="title" value="北坂戸、集合。"><span class="n">10</span><span class="t">北坂戸、集合。</span></label>
+    </div>
+    <input type="text" id="titleOwn" placeholder="自分で考えるならここに（任意）" style="margin-top:8px;">
+  </section>
+
+  <section>
+    <h2>聴いた感想</h2>
+    <p class="lead">「◯◯の話もっと聴きたい」だけでも十分。ここが一番ほしい。</p>
+    <textarea id="feedback" placeholder="例：尿酸値のくだり、他人事じゃなくて笑った"></textarea>
+  </section>
+
+  <section>
+    <h2>次回、話したいネタ</h2>
+    <p class="lead">思いつくだけ雑に。</p>
+    <textarea id="neta" placeholder="例：百名山ラスト1座の話をちゃんと聞きたい"></textarea>
+  </section>
+
+  <section>
+    <h2>次のバーミヤン、いつ行ける？</h2>
+    <p class="lead">候補日でも「土日ならだいたい」でもOK。</p>
+    <input type="text" id="date" placeholder="例：9月の第3土曜あたりなら空いてる">
+  </section>
+
+  <div class="copybox">
+    <p>書けたらボタンを押して、LINEグループに貼ってください。</p>
+    <button type="button" id="copy">LINEに貼る文をコピー</button>
+    <p class="saved" id="saved">入力は自動で保存されるので、途中で閉じても消えません。</p>
   </div>
 
-    <div class="card">
-    <span class="tag">B</span><span class="name">北坂戸1989</span>
-    <div class="yomi">きたさかど いちきゅうはちきゅう</div>
-    <img src="img/logo6.png" alt="B案ロゴ: 北坂戸1989" loading="lazy">
-    <p class="why">3人とも平成元年＝1989年生まれ。地元と生まれ年だけで名乗る、いちばんシンプルで強い記号。</p>
-  </div>
-
-  <div class="card">
-    <span class="tag">C</span><span class="name">FM北坂戸</span>
-    <div class="yomi">えふえむ きたさかど</div>
-    <img src="img/logo7.png" alt="C案ロゴ: FM北坂戸" loading="lazy">
-    <p class="why">存在しないコミュニティFM局を名乗るスタイル。周波数89.0MHz（自称）は1989年生まれから。</p>
-  </div>
-
-  <div class="card">
-    <span class="tag">D</span><span class="name">月イチ北坂戸</span>
-    <div class="yomi">つきいちきたさかど</div>
-    <img src="img/logo4.png" alt="D案ロゴ: カレンダーデザイン" loading="lazy">
-    <p class="why">月1収録の宣言タイトル。カレンダーに赤丸ひとつ。サボると聴いてる人にバレる仕組み。</p>
-  </div>
-
-  <div class="card">
-    <span class="tag">E</span><span class="name">北坂戸倶楽部</span>
-    <div class="yomi">きたさかどくらぶ</div>
-    <img src="img/logo8.png" alt="E案ロゴ: エンブレムデザイン" loading="lazy">
-    <p class="why">紳士の社交場風エンブレム（EST. 1989）。実態はバーミヤン。そのギャップごと楽しむ案。</p>
-  </div>
-
-  <div class="vote">
-    <b>選び方:</b> LINEグループに「おれはC」みたいに一言返信してください。3人の多数決。割れたら次回のバーミヤンで決着。
-  </div>
+  <footer>坂戸ベース / 第1回 2026年8月18日 バーミヤン北坂戸にて収録</footer>
 </div>
+
+<script>
+(function(){
+  var KEY = 'sakado-base-ep1';
+  var els = {
+    titleOwn: document.getElementById('titleOwn'),
+    feedback: document.getElementById('feedback'),
+    neta:     document.getElementById('neta'),
+    date:     document.getElementById('date')
+  };
+  var whoBtns = document.querySelectorAll('.who button');
+
+  function state(){
+    var t = document.querySelector('input[name=title]:checked');
+    var w = document.querySelector('.who button[aria-pressed=true]');
+    return {
+      who: w ? w.dataset.name : '',
+      title: t ? t.value : '',
+      titleOwn: els.titleOwn.value,
+      feedback: els.feedback.value,
+      neta: els.neta.value,
+      date: els.date.value
+    };
+  }
+
+  function save(){
+    try { localStorage.setItem(KEY, JSON.stringify(state())); } catch(e){}
+  }
+
+  function restore(){
+    var s;
+    try { s = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch(e){ return; }
+    if (!s) return;
+    if (s.who) whoBtns.forEach(function(b){
+      b.setAttribute('aria-pressed', b.dataset.name === s.who ? 'true' : 'false');
+    });
+    if (s.title) {
+      var r = document.querySelector('input[name=title][value="' + s.title.replace(/"/g,'\\"') + '"]');
+      if (r) r.checked = true;
+    }
+    ['titleOwn','feedback','neta','date'].forEach(function(k){
+      if (s[k]) els[k].value = s[k];
+    });
+  }
+
+  whoBtns.forEach(function(b){
+    b.addEventListener('click', function(){
+      whoBtns.forEach(function(o){ o.setAttribute('aria-pressed', o === b ? 'true' : 'false'); });
+      save();
+    });
+  });
+  document.querySelectorAll('input[name=title]').forEach(function(r){
+    r.addEventListener('change', save);
+  });
+  Object.keys(els).forEach(function(k){ els[k].addEventListener('input', save); });
+
+  function buildText(){
+    var s = state();
+    var lines = ['【坂戸ベース 第1回】' + (s.who || '')];
+    var t = s.titleOwn ? s.titleOwn + '（自分で考えた案）' : s.title;
+    if (t)          lines.push('▼タイトルはこれ\n' + t);
+    if (s.feedback) lines.push('▼感想\n' + s.feedback);
+    if (s.neta)     lines.push('▼次回話したいネタ\n' + s.neta);
+    if (s.date)     lines.push('▼次いける日\n' + s.date);
+    return lines.join('\n\n');
+  }
+
+  var btn = document.getElementById('copy');
+  btn.addEventListener('click', function(){
+    var text = buildText();
+    function ok(){
+      btn.textContent = 'コピーしました！LINEに貼ってね';
+      btn.classList.add('done');
+      setTimeout(function(){
+        btn.textContent = 'LINEに貼る文をコピー';
+        btn.classList.remove('done');
+      }, 2600);
+    }
+    function fallback(){
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); ok(); }
+      catch(e){ window.prompt('この文をコピーしてLINEに貼ってください', text); }
+      document.body.removeChild(ta);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(ok, fallback);
+    } else {
+      fallback();
+    }
+  });
+
+  restore();
+})();
+</script>
 </body>
 </html>
