@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
+<meta name="google" content="notranslate">
 <title>坂戸ベース 第1回</title>
 <style>
   *{margin:0;padding:0;box-sizing:border-box;}
@@ -62,12 +63,18 @@
   textarea{min-height:100px;}
 
   .cal{background:var(--card);border:2px solid var(--line);border-radius:12px;padding:14px 12px;margin-bottom:10px;}
-  .calnav{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
-  .calnav h3{flex:1;font-size:15px;font-weight:800;text-align:center;margin:0;}
+  .calnav{
+    display:grid;grid-template-columns:40px 1fr 40px;align-items:center;
+    gap:8px;margin-bottom:12px;
+  }
+  .calnav h3{
+    font-size:15px;font-weight:800;text-align:center;margin:0;
+    white-space:nowrap;overflow:hidden;
+  }
   .calnav button{
-    width:40px;height:36px;flex-shrink:0;
+    width:40px;height:36px;padding:0;
     border:2px solid var(--line);background:var(--card);border-radius:10px;
-    font-family:inherit;font-size:14px;color:var(--ink);cursor:pointer;
+    font-family:inherit;font-size:14px;line-height:1;color:var(--ink);cursor:pointer;
   }
   .calnav button:disabled{color:#dad4ca;border-color:#f1ede6;cursor:default;}
   .cal table{width:100%;border-collapse:collapse;table-layout:fixed;}
@@ -237,10 +244,10 @@
     var off = monthOffset();
     host.innerHTML =
       '<div class="cal">' +
-        '<div class="calnav">' +
-          '<button type="button" id="prevM" aria-label="前の月"' + (off <= 0 ? ' disabled' : '') + '>◀</button>' +
-          '<h3>' + viewY + '年' + (viewM + 1) + '月</h3>' +
-          '<button type="button" id="nextM" aria-label="次の月"' + (off >= MAX_AHEAD ? ' disabled' : '') + '>▶</button>' +
+        '<div class="calnav" translate="no">' +
+          '<button type="button" id="prevM" aria-label="前の月"' + (off <= 0 ? ' disabled' : '') + '>&#9664;</button>' +
+          '<h3 translate="no">' + viewY + '年' + (viewM + 1) + '月</h3>' +
+          '<button type="button" id="nextM" aria-label="次の月"' + (off >= MAX_AHEAD ? ' disabled' : '') + '>&#9654;</button>' +
         '</div>' +
         '<table>' + head + rows + '</table>' +
       '</div>';
