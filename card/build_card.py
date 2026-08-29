@@ -6,10 +6,11 @@ import qrcode, pathlib
 QR_URL = "https://open.spotify.com/show/4KlYeHzLWmrgUl5CO7osx3"
 
 # ---- 版面（すべて実寸の相対値・単位はSVGユーザー単位）----
-W, H      = 1000, 760      # 吹き出しの胴体
+TAIL_H_   = 175
+W, H      = 1000, 1000 - TAIL_H_   # 胴体＋しっぽ＝1000角の正方形に収める
 R         = 92             # 角丸
 TAIL_W    = 150            # しっぽの幅
-TAIL_H    = 175            # しっぽの高さ
+TAIL_H    = TAIL_H_        # しっぽの高さ
 PAD       = 80             # 版面の余白
 GAP       = 60             # 左ブロックとQRの間
 S         = (W - PAD*2 - GAP) // 2      # 左右それぞれの正方形の一辺 = 390
@@ -62,7 +63,7 @@ def card_back():
     y2 = y1 + gap + h2
     y3 = y2 + gap + h3
     # 下三分の一: 検索窓＋配信表記
-    sy   = TOP + S + 74                   # 検索窓の上端
+    sy   = TOP + S + 100                   # 検索窓の上端
     sh   = 96                             # 検索窓の高さ
     btnw = 150
     return f'''<svg class="card" viewBox="-20 -20 {W+40} {H+TAIL_H+40}" xmlns="http://www.w3.org/2000/svg">
