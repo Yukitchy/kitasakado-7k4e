@@ -95,6 +95,41 @@
   }
   .picked.none{color:var(--sub);font-weight:400;background:var(--card);}
 
+  /* ---- 文庫版 ---- */
+  .toc{background:var(--card);border:2px solid var(--line);border-radius:12px;padding:4px 0;list-style:none;margin-bottom:10px;}
+  .toc li{border-top:1px solid var(--line);}
+  .toc li:first-child{border-top:none;}
+  .toc button{display:flex;gap:10px;align-items:baseline;width:100%;text-align:left;
+    background:none;border:none;font-family:inherit;padding:10px 14px;cursor:pointer;color:var(--ink);}
+  .toc .tt{font-size:12px;font-weight:800;color:var(--red);font-variant-numeric:tabular-nums;
+    flex-shrink:0;width:3.2em;}
+  .toc .tn{font-size:14px;font-weight:800;line-height:1.5;}
+  .toc .ts{display:block;font-size:12px;color:var(--sub);font-weight:400;margin-top:1px;line-height:1.6;}
+  .toc li.now .tn{color:var(--red);}
+  #bknToggle{width:100%;padding:14px;font-family:inherit;font-size:15px;font-weight:800;
+    background:var(--card);color:var(--ink);border:2px solid var(--line);border-radius:12px;cursor:pointer;}
+  .bch{font-size:15px;font-weight:800;margin:28px 0 10px;padding-left:12px;border-left:5px solid var(--red);}
+  .bch small{display:block;font-size:12px;color:var(--sub);font-weight:400;}
+  .bb{margin:10px 0;padding:2px 0 2px 12px;border-left:3px solid var(--line);cursor:pointer;}
+  .bb .bw{font-size:12px;font-weight:800;margin-right:8px;}
+  .bb .btm{font-size:11px;color:var(--sub);font-variant-numeric:tabular-nums;}
+  .bb .bx{display:block;font-size:15px;}
+  .bb.s0{border-left-color:var(--red);} .bb.s0 .bw{color:var(--red);}
+  .bb.s1{border-left-color:#3f6fb0;} .bb.s1 .bw{color:#3f6fb0;}
+  .bb.s2{border-left-color:#3d8b52;} .bb.s2 .bw{color:#3d8b52;}
+  .bb.now{background:#fff7f3;}
+  #script mark{background:#ffe9a8;padding:0 2px;border-radius:3px;}
+  #mini{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));
+    max-width:600px;margin:0 auto;background:var(--ink);color:#fff;border-radius:999px;
+    display:flex;align-items:center;gap:10px;padding:8px 10px;
+    box-shadow:0 4px 16px rgba(0,0,0,.25);z-index:50;}
+  #mini[hidden]{display:none;}
+  #mini button{width:44px;height:44px;border-radius:50%;border:none;background:var(--red);
+    color:#fff;font-size:16px;cursor:pointer;flex-shrink:0;}
+  #mini .mt{font-size:11px;font-variant-numeric:tabular-nums;color:#ddd;flex-shrink:0;}
+  #mini input[type=range]{flex:1;min-width:40px;accent-color:var(--red);}
+  body.hasmini{padding-bottom:92px;}
+
   .copybox{
     background:var(--card);border:2px solid var(--red);border-radius:16px;
     padding:20px;text-align:center;
@@ -120,9 +155,17 @@
 
   <div class="player">
     <div class="label">▶ 第1回（32分・BGM入り編集済み）</div>
-    <audio controls preload="none" src="ep0.mp3"></audio>
+    <audio controls preload="none" src="ep0.mp3" id="ep"></audio>
   </div>
   <p class="note">※このページはURLを知っている3人だけの共有用です。拡散はしないでください。<br>話した内容：自己紹介／健康診断と尿酸値／睡眠サイクル論争／百名山98座／インバウンド／地元の昔の名店</p>
+
+  <section id="bunko">
+    <h2>文庫版 全文書き起こし</h2>
+    <p class="lead">章をタップするとその場面から再生。本文の段落タップでも頭出しできます。</p>
+    <ol id="toc" class="toc"></ol>
+    <button type="button" id="bknToggle">📖 全文を読む</button>
+    <div id="script" hidden></div>
+  </section>
 
   <section>
     <h2>まず、誰？</h2>
@@ -180,6 +223,147 @@
 
   <footer>坂戸ベース / 第1回 2026年8月18日 バーミヤン北坂戸にて収録</footer>
 </div>
+
+<div id="mini" hidden>
+  <button type="button" id="mBtn" aria-label="再生/停止">▶</button>
+  <span class="mt" id="mCur">0:00</span>
+  <input type="range" id="mSeek" min="0" max="100" step="0.1" value="0" aria-label="シーク">
+  <span class="mt" id="mDur">--:--</span>
+</div>
+
+<script src="bunko-data.js"></script>
+<script>
+// ---- 文庫版（投票フォームのJSとは独立したIIFE）----
+(function(){
+  var au = document.getElementById('ep');
+  if (!au || !window.BUNKO) return;
+  var B = window.BUNKO, names = B.names, marks = B.marks || [];
+  var toc = document.getElementById('toc'), box = document.getElementById('script'),
+      tg = document.getElementById('bknToggle');
+  var mini = document.getElementById('mini'), mBtn = document.getElementById('mBtn'),
+      mSeek = document.getElementById('mSeek'), mCur = document.getElementById('mCur'),
+      mDur = document.getElementById('mDur');
+  var built = false, open = false, follow = true, drag = false, activeEl = null, bbs = [];
+
+  function fmt(s){ s = Math.floor(s); return Math.floor(s/60) + ':' + ('0' + s%60).slice(-2); }
+  function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function markup(t){
+    var e = esc(t);
+    marks.forEach(function(m){
+      var em = esc(m);
+      e = e.split(em).join('<mark>' + em + '</mark>');
+    });
+    return e;
+  }
+  function seekTo(t, play){
+    var go = function(){
+      au.pause();
+      try { au.currentTime = t; } catch(e){}
+      if (play) au.addEventListener('seeked', function h(){
+        au.removeEventListener('seeked', h); au.play();
+      }, { once:true });
+    };
+    if (au.readyState >= 1) go();
+    else { au.addEventListener('loadedmetadata', go, { once:true }); au.load(); }
+  }
+
+  // 目次
+  B.chapters.forEach(function(c, i){
+    var li = document.createElement('li');
+    li.innerHTML = '<button type="button"><span class="tt">' + fmt(c.t) + '</span>' +
+      '<span><span class="tn">' + esc(c.title) + '</span>' +
+      '<span class="ts">' + esc(c.sum) + '</span></span></button>';
+    li.querySelector('button').addEventListener('click', function(){
+      setOpen(true);
+      seekTo(c.t, true); follow = true;
+      var el = document.getElementById('bch' + i);
+      if (el) setTimeout(function(){ el.scrollIntoView({ behavior:'smooth', block:'start' }); }, 60);
+    });
+    toc.appendChild(li);
+  });
+
+  // 本文（初回展開時に一度だけ生成）
+  function build(){
+    if (built) return; built = true;
+    var frag = document.createDocumentFragment(), ci = -1;
+    B.turns.forEach(function(tr){
+      while (ci + 1 < B.chapters.length && tr[0] >= B.chapters[ci+1].t){
+        ci++;
+        var h = document.createElement('h3');
+        h.className = 'bch'; h.id = 'bch' + ci;
+        h.innerHTML = esc(B.chapters[ci].title) + '<small>' + esc(B.chapters[ci].sum) + '</small>';
+        frag.appendChild(h);
+      }
+      var d = document.createElement('div');
+      d.className = 'bb s' + tr[1];
+      d.dataset.t = tr[0];
+      d.innerHTML = '<span class="bw">' + names[tr[1]] + '</span>' +
+        '<span class="btm">' + fmt(tr[0]) + '</span>' +
+        '<span class="bx">' + markup(tr[2]) + '</span>';
+      bbs.push(d);
+      frag.appendChild(d);
+    });
+    box.appendChild(frag);
+  }
+  box.addEventListener('click', function(e){
+    var b = e.target.closest('.bb');
+    if (!b) return;
+    if (window.getSelection && String(window.getSelection())) return;
+    seekTo(parseFloat(b.dataset.t) || 0, true); follow = true;
+  });
+  function setOpen(v){
+    open = v; box.hidden = !v;
+    if (v) build();
+    tg.textContent = v ? '▲ 全文をとじる' : '📖 全文を読む';
+    updMini();
+  }
+  tg.addEventListener('click', function(){ setOpen(!open); });
+
+  // ミニプレイヤー（audioは上の1つだけ・これはリモコン）
+  function updMini(){
+    var on = open || !au.paused;
+    mini.hidden = !on;
+    document.body.classList.toggle('hasmini', on);
+  }
+  mBtn.addEventListener('click', function(){ au.paused ? au.play() : au.pause(); });
+  au.addEventListener('play',  function(){ mBtn.textContent = '❚❚'; updMini(); });
+  au.addEventListener('pause', function(){ mBtn.textContent = '▶'; updMini(); });
+  au.addEventListener('loadedmetadata', function(){ mDur.textContent = fmt(au.duration); });
+  mSeek.addEventListener('input',  function(){ drag = true; });
+  mSeek.addEventListener('change', function(){
+    drag = false;
+    if (au.duration) seekTo(mSeek.value / 100 * au.duration);
+  });
+
+  // 再生位置の追従（手動スクロールで自動オフ・タップ頭出しでオン）
+  ['wheel','touchmove'].forEach(function(ev){
+    window.addEventListener(ev, function(){ if (!au.paused && follow) follow = false; }, { passive:true });
+  });
+  au.addEventListener('timeupdate', function(){
+    var t = au.currentTime;
+    mCur.textContent = fmt(t);
+    if (!drag && au.duration) mSeek.value = t / au.duration * 100;
+    // 目次の現在章
+    var ci = -1;
+    B.chapters.forEach(function(c, i){ if (c.t <= t) ci = i; });
+    toc.querySelectorAll('li').forEach(function(li, i){ li.classList.toggle('now', i === ci); });
+    if (!built || !open) return;
+    // 現在の段落
+    var cur = null;
+    for (var i = 0; i < bbs.length; i++){
+      if (parseFloat(bbs[i].dataset.t) <= t) cur = bbs[i]; else break;
+    }
+    if (cur !== activeEl){
+      if (activeEl) activeEl.classList.remove('now');
+      activeEl = cur;
+      if (activeEl){
+        activeEl.classList.add('now');
+        if (follow && !au.paused) activeEl.scrollIntoView({ behavior:'smooth', block:'center' });
+      }
+    }
+  });
+})();
+</script>
 
 <script>
 (function(){
