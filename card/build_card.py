@@ -16,8 +16,8 @@ PAD       = 80             # 版面の余白
 GAP       = 60             # 左ブロックとQRの間
 S         = (W - PAD*2 - GAP) // 2      # 左右それぞれの正方形の一辺 = 390
 TOP       = 70                          # 上ユニットの上端
-RED       = "#d8432c"
-INK       = "#d8432c"
+RED       = "#E25B23"
+INK       = "#E25B23"
 
 ASSETS = pathlib.Path(__file__).parent / "assets"
 
