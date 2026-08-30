@@ -196,6 +196,24 @@
   #copy.done{background:#3d8b52;}
   .saved{font-size:12px;color:var(--sub);margin-top:12px;}
   footer{text-align:center;font-size:12px;color:var(--sub);margin-top:36px;}
+
+  .log{background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:20px 18px 18px;margin-bottom:34px;}
+  .log h2{font-size:17px;font-weight:900;margin:0 0 4px;}
+  .log .lead{font-size:13px;color:var(--sub);margin:0 0 16px;}
+  .log ol{list-style:none;margin:0;padding:0 0 0 22px;position:relative;}
+  .log ol::before{content:"";position:absolute;left:5px;top:6px;bottom:14px;
+    width:3px;background:var(--line);border-radius:2px;}
+  .log li{position:relative;padding:0 0 15px;}
+  .log li::before{content:"";position:absolute;left:-22px;top:5px;
+    width:13px;height:13px;border-radius:50%;background:var(--card);
+    border:3px solid var(--orange);box-sizing:border-box;}
+  .log li:last-child{padding-bottom:0;}
+  .log li:last-child::before{background:var(--red);border-color:var(--red);}
+  .log .lt{font-size:15px;font-weight:800;line-height:1.5;}
+  .log .ld{font-size:13px;color:var(--sub);line-height:1.6;margin-top:2px;}
+  .log .now{margin-top:16px;background:#EEF3FF;border:2px solid var(--red);
+    border-radius:12px;padding:13px 14px;font-size:14px;font-weight:700;line-height:1.6;}
 </style>
 </head>
 <body>
@@ -229,6 +247,38 @@
   </div>
   <p class="note">※このページはURLを知っている3人だけの共有用です。拡散はしないでください。<br>話した内容：自己紹介／健康診断と尿酸値／睡眠サイクル論争／百名山98座／インバウンド／地元の昔の名店</p>
 
+  <div class="log">
+    <h2>収録したあと、こうなりました</h2>
+    <p class="lead">タクマと大場先生へ。8/18にバーミヤンで喋ったあと、いっちゃんが進めていた分の報告です。</p>
+    <ol>
+      <li>
+        <div class="lt">音を整えて32分にまとめた</div>
+        <div class="ld">店内のガヤは残したまま、声だけ聴きやすくなるよう調整。BGMも入れました。</div>
+      </li>
+      <li>
+        <div class="lt">ロゴ（アートワーク）を作った</div>
+        <div class="ld">駅名標をイメージしたオレンジ×紺。このページのいちばん上に出ているのがそれです。</div>
+      </li>
+      <li>
+        <div class="lt">Spotifyに番組を開設して第1回を公開した</div>
+        <div class="ld">タイトルは「坂戸ベース開局」。もう誰でも聴ける状態です。</div>
+      </li>
+      <li>
+        <div class="lt">Apple・Amazon Music・Pocket Casts・Castbox・LISTENにも配信した</div>
+        <div class="ld">普段使っているアプリで「坂戸ベース」と検索すれば出てきます。</div>
+      </li>
+      <li>
+        <div class="lt">全部の会話を文字に起こして「文庫版」にした</div>
+        <div class="ld">このページの下にあります。章をタップするとその場面から再生できます。</div>
+      </li>
+      <li>
+        <div class="lt">第2回の場所と日程を押さえた</div>
+        <div class="ld">9/29（火）17:00・ココス坂戸店。カレンダーに入れておいてください。</div>
+      </li>
+    </ol>
+    <div class="now">ここから2人にお願いしたいこと：下の「のりば」を上から順にタップして、ロゴの色とサブタイトルを選び、感想と次回のネタを書いてください。最後のボタンでLINEに貼る文ができます。</div>
+  </div>
+
   <section id="bunko">
     <h2>文庫版</h2>
     <p class="lead">章をタップするとその場面から再生。本文の段落タップでも頭出しできます。</p>
@@ -238,7 +288,7 @@
       <div class="sh2">決めたこと</div>
       <ul>
         <li>月1回バーミヤンに集まって収録する</li>
-        <li>番組タイトルは後日決定 → 「坂戸ベース」に確定済み。回のタイトルは下で投票中</li>
+        <li>番組タイトルは後日決定 → 「坂戸ベース」に確定済み</li>
       </ul>
     </div>
     <ol id="toc" class="toc"></ol>
