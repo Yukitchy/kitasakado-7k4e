@@ -140,6 +140,15 @@
   .modes button{flex:1;padding:10px 8px;font-family:inherit;font-size:13px;font-weight:800;
     background:var(--card);color:var(--sub);border:2px solid var(--line);border-radius:999px;cursor:pointer;}
   .modes button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink);}
+  .dg{background:var(--card);border-radius:12px;padding:14px 16px;margin:12px 0;}
+  .dg .dgh{display:flex;gap:10px;align-items:baseline;cursor:pointer;}
+  .dg .dgh .tt{color:var(--red);font-weight:800;font-size:13px;font-variant-numeric:tabular-nums;flex-shrink:0;}
+  .dg .dgh h3{font-size:15px;font-weight:900;}
+  .dg p{font-size:14px;margin:6px 0 2px;}
+  .dgq{margin:8px 0 0;padding:8px 12px;border-left:3px solid var(--orange);
+    background:#FFF9EC;font-size:13px;cursor:pointer;border-radius:0 8px 8px 0;}
+  .dgq .qw{font-weight:800;color:var(--sub);font-size:13px;margin-right:6px;}
+  .dg.now{outline:2px solid var(--red);}
   #bknToggle{width:100%;padding:14px;font-family:inherit;font-size:15px;font-weight:800;
     background:var(--card);color:var(--ink);border:2px solid var(--line);border-radius:12px;cursor:pointer;}
   .bch{font-size:15px;font-weight:800;margin:28px 0 10px;padding-left:12px;border-left:5px solid var(--red);}
@@ -215,8 +224,9 @@
     <button type="button" id="bknToggle">📖 本文を読む</button>
     <div id="script" hidden>
       <div class="modes" id="modes" hidden>
-        <button type="button" data-m="c" aria-pressed="true">読み物（整文済み）</button>
-        <button type="button" data-m="r" aria-pressed="false">全文（原文ママ）</button>
+        <button type="button" data-m="d" aria-pressed="true">ダイジェスト</button>
+        <button type="button" data-m="c" aria-pressed="false">読み物</button>
+        <button type="button" data-m="r" aria-pressed="false">全文</button>
       </div>
       <div id="bubbles"></div>
     </div>
@@ -297,8 +307,9 @@
       tg = document.getElementById('bknToggle'),
       bub = document.getElementById('bubbles'), modesRow = document.getElementById('modes');
   var hasClean = !!(B.cturns && B.cturns.length);
-  var mode = hasClean ? 'c' : 'r';
-  if (hasClean) modesRow.hidden = false;
+  var hasDig = !!(B.digest && B.digest.length);
+  var mode = hasDig ? 'd' : (hasClean ? 'c' : 'r');
+  if (hasClean || hasDig) modesRow.hidden = false;
   function curSet(){ return mode === 'c' && hasClean ? B.cturns : B.turns; }
   function curMarks(){ return (mode === 'c' && hasClean ? B.cmarks : B.marks) || []; }
   var mini = document.getElementById('mini'), mBtn = document.getElementById('mBtn'),
@@ -347,6 +358,7 @@
   function build(){
     built = true;
     bub.innerHTML = ''; bbs = []; activeEl = null;
+    if (mode === 'd'){ buildDigest(); return; }
     var frag = document.createDocumentFragment(), ci = -1;
     curSet().forEach(function(tr){
       while (ci + 1 < B.chapters.length && tr[0] >= B.chapters[ci+1].t){
@@ -376,7 +388,24 @@
     });
     build();
   });
+  function buildDigest(){
+    var frag = document.createDocumentFragment();
+    B.digest.forEach(function(c){
+      var d = document.createElement('div');
+      d.className = 'dg';
+      var quotes = (c.quotes || []).map(function(q){
+        return '<div class="dgq" data-t="' + q[0] + '"><span class="qw">' + esc(q[1]) + '</span>' +
+          '「' + esc(q[2]) + '」</div>';
+      }).join('');
+      d.innerHTML = '<div class="dgh" data-t="' + c.t + '"><span class="tt">' + fmt(c.t) + ' ▶</span>' +
+        '<h3>' + esc(c.title) + '</h3></div><p>' + esc(c.body) + '</p>' + quotes;
+      frag.appendChild(d);
+    });
+    bub.appendChild(frag);
+  }
   box.addEventListener('click', function(e){
+    var q = e.target.closest('.dgq,.dgh');
+    if (q){ seekTo(parseFloat(q.dataset.t) || 0, true); follow = true; return; }
     var b = e.target.closest('.bb');
     if (!b) return;
     if (window.getSelection && String(window.getSelection())) return;
@@ -419,6 +448,10 @@
     B.chapters.forEach(function(c, i){ if (c.t <= t) ci = i; });
     toc.querySelectorAll('li').forEach(function(li, i){ li.classList.toggle('now', i === ci); });
     if (!built || !open) return;
+    if (mode === 'd'){
+      bub.querySelectorAll('.dg').forEach(function(el, i){ el.classList.toggle('now', i === ci); });
+      return;
+    }
     // 現在の段落
     var cur = null;
     for (var i = 0; i < bbs.length; i++){
