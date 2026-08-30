@@ -14,11 +14,9 @@ h1,h2,h3,button{text-wrap:balance}
 /* ══ ロゴ色ピッカー ══ */
 .logopick{max-width:430px;margin:20px auto 6px;padding:0 16px}
 .logopick h2{font-size:16px;font-weight:900;margin-bottom:10px}
-.lgstage{border-radius:22px;padding:44px 0 56px;display:grid;place-items:center;
-  background:var(--lg-bg,#F0EAD8);transition:background .25s}
-.lgstage .blogo{background:var(--lg-bub,#D9541E);color:var(--lg-txt,#fff);
-  padding:24px 28px 20px;border-radius:30px;transition:background .25s,color .25s}
-.lgstage .blogo::after{border-bottom-color:var(--lg-bub,#D9541E);transition:border-color .25s}
+.lgstage{border-radius:22px;overflow:hidden}
+.lgstage img{width:100%;display:block}
+.lgsync{display:block;border-radius:18px}
 .lgname{text-align:center;font-size:14px;font-weight:800;margin:10px 0 12px}
 .lgrow{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
 .lgrow button{position:relative;height:52px;border-radius:12px;border:2.5px solid transparent;
@@ -42,20 +40,10 @@ section[hidden]{display:none}
 .desc{max-width:430px;margin:12px auto 0;padding:0 6px;font-size:13px;color:#55555e}
 .desc b{color:#1b1b1f}
 
-/* 共通: 吹き出しロゴ（角丸+左下しっぽ） */
-.blogo{position:relative;display:inline-block;border-radius:26%/26%;
-  font-weight:900;text-align:center;line-height:1.06;letter-spacing:.02em}
-.blogo::after{content:"";position:absolute;left:14%;top:99%;
-  border-style:solid;border-width:0 0 26px 22px;border-color:transparent}
-.blogo .s1{display:block;font-size:34px}
-.blogo .s2{display:block;font-size:34px}
-.blogo .s3{display:block;font-size:8.5px;font-weight:700;letter-spacing:.14em;margin-top:6px}
-
 /* ══ 案1 会話ログ ══ */
 .p1{background:#F4EFE4;padding:26px 18px 34px}
-.p1 .head{text-align:center;margin-bottom:6px}
-.p1 .blogo{background:#D9541E;color:#fff;padding:22px 26px 18px;border-radius:28px}
-.p1 .blogo::after{border-bottom-color:#D9541E}
+.p1 .head{display:grid;place-items:center;margin-bottom:6px}
+.p1 .lgsync{width:230px}
 .p1 .tagline{font-size:13px;color:#6b655a;margin:18px 0 22px;text-align:center}
 .p1 .msg{position:relative;background:#fff;border-radius:20px;padding:14px 16px;
   margin:14px 0 14px 12px;max-width:88%}
@@ -105,9 +93,8 @@ section[hidden]{display:none}
 .p3{background:#F3E6CE;padding:24px 18px 34px}
 .p3 .menu{background:#FFFDF6;border-radius:6px;padding:24px 20px;
   outline:2px solid #57332B;outline-offset:-10px}
-.p3 .mh{text-align:center;margin-bottom:4px}
-.p3 .blogo{background:#57332B;color:#F3E6CE;padding:18px 20px 14px;border-radius:24px;transform:scale(.82)}
-.p3 .blogo::after{border-bottom-color:#57332B}
+.p3 .mh{display:grid;place-items:center;margin-bottom:4px}
+.p3 .lgsync{width:190px}
 .p3 .sub{text-align:center;font-size:13px;color:#8a6a52;letter-spacing:.3em;font-weight:700;margin:2px 0 18px}
 .p3 .dish{display:flex;align-items:baseline;gap:8px;padding:11px 2px;font-size:14px}
 .p3 .dish .nm{font-weight:800}
@@ -124,9 +111,8 @@ section[hidden]{display:none}
 .p4 .onair{display:inline-flex;align-items:center;gap:8px;border:2px solid #D9541E;color:#FF7A3D;
   border-radius:8px;padding:5px 12px;font-size:13px;font-weight:900;letter-spacing:.2em}
 .p4 .onair i{width:9px;height:9px;border-radius:50%;background:#FF7A3D}
-.p4 .head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:26px}
-.p4 .blogo{background:#D9541E;color:#fff;padding:20px 24px 16px;border-radius:26px}
-.p4 .blogo::after{border-bottom-color:#D9541E}
+.p4 .head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:26px}
+.p4 .lgsync{width:130px;border-radius:14px;flex-shrink:0}
 .p4 .big{font-size:24px;font-weight:900;line-height:1.5;margin:8px 0 4px}
 .p4 .sub{font-size:13px;color:#9aa3b5}
 .p4 .wave{display:flex;align-items:flex-end;gap:4px;height:46px;margin:22px 0}
@@ -162,9 +148,7 @@ section[hidden]{display:none}
 
 <div class="logopick" id="logopick">
   <h2>まずロゴの色 どれにする？</h2>
-  <div class="lgstage" id="lgStage">
-    <span class="blogo"><span class="s1">坂戸</span><span class="s2">ベース</span><span class="s3">PODCAST SINCE 2026</span></span>
-  </div>
+  <div class="lgstage"><img id="lgImg" src="img/logo10/01.jpg" alt="坂戸ベース ロゴ"></div>
   <p class="lgname" id="lgName"></p>
   <div class="lgrow" id="lgRow"></div>
 </div>
@@ -181,7 +165,7 @@ section[hidden]{display:none}
 <!-- 案1 会話ログ: ページ全体をLINEのトーク画面の文法で -->
 <section id="a1">
 <div class="frame"><div class="p1">
-  <div class="head"><span class="blogo"><span class="s1">坂戸</span><span class="s2">ベース</span><span class="s3">PODCAST SINCE 2026</span></span></div>
+  <div class="head"><img class="lgsync" src="img/logo10/01.jpg" alt=""></div>
   <p class="tagline">1989年生まれ・北坂戸の3人が月イチで集まる雑談ラジオ</p>
   <div class="play"><span class="pb">▶</span><span><span class="tt">第1回（32分）</span><br><span class="tm">バーミヤン北坂戸にて収録</span></span></div>
   <div class="msg"><div class="who">坂戸ベース</div><p>第1回のタイトル、どれがいい？10案から選んでね</p></div>
@@ -216,7 +200,7 @@ section[hidden]{display:none}
 <section id="a3" hidden>
 <div class="frame"><div class="p3">
   <div class="menu">
-    <div class="mh"><span class="blogo"><span class="s1">坂戸</span><span class="s2">ベース</span><span class="s3">PODCAST SINCE 2026</span></span></div>
+    <div class="mh"><img class="lgsync" src="img/logo10/05.jpg" alt=""></div>
     <p class="sub">お品書き</p>
     <div class="dish"><span class="nm">第1回を聴く</span><span class="dots"></span><span class="pr">32分</span></div>
     <div class="dish"><span class="nm">タイトル投票</span><span class="dots"></span><span class="pr">10案</span></div>
@@ -237,7 +221,7 @@ section[hidden]{display:none}
     <div><span class="onair"><i></i>ON AIR</span>
       <p class="big">第1回 配信中</p>
       <p class="sub">2026.8.18 バーミヤン北坂戸</p></div>
-    <span class="blogo"><span class="s1" style="font-size:22px">坂戸</span><span class="s2" style="font-size:22px">ベース</span><span class="s3" style="font-size:6.5px">PODCAST SINCE 2026</span></span>
+    <img class="lgsync" src="img/logo10/03.jpg" alt="">
   </div>
   <div class="wave"><i style="height:30%"></i><i style="height:55%"></i><i class="hot" style="height:90%"></i><i style="height:45%"></i><i style="height:70%"></i><i class="hot" style="height:100%"></i><i style="height:38%"></i><i style="height:62%"></i><i style="height:26%"></i><i class="hot" style="height:80%"></i><i style="height:50%"></i><i style="height:34%"></i></div>
   <div class="row"><span>タイトル投票</span><span class="t">10案から選ぶ</span></div>
@@ -285,9 +269,8 @@ section[hidden]{display:none}
       name=document.getElementById('lgName');
   function pick(i){
     var c=C[i];
-    stage.style.setProperty('--lg-bg',c[2]);
-    stage.style.setProperty('--lg-bub',c[3]);
-    stage.style.setProperty('--lg-txt',c[4]);
+    document.getElementById('lgImg').src='img/logo10/'+c[0]+'.jpg';
+    document.querySelectorAll('.lgsync').forEach(function(im){im.src='img/logo10/'+c[0]+'.jpg';});
     name.textContent=c[0]+' '+c[1];
     row.querySelectorAll('button').forEach(function(b,j){
       b.setAttribute('aria-selected',j===i?'true':'false');});
