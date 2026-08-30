@@ -9,19 +9,44 @@
 <style>
   *{margin:0;padding:0;box-sizing:border-box;}
   :root{
-    --paper:#faf7f2; --ink:#2b2b2b; --sub:#8a8378; --line:#e8e2d8;
-    --red:#d8552b; --card:#fff;
+    --paper:#F4F6F9; --ink:#1B2430; --sub:#6B7280; --line:#E2E6EC;
+    --red:#00379B; --orange:#F5A200; --card:#fff;
   }
   body{
     font-family:"Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
     background:var(--paper); color:var(--ink); line-height:1.75;
-    padding:26px 16px 40px; -webkit-text-size-adjust:100%;
+    padding:40px 16px 40px; -webkit-text-size-adjust:100%;
+    position:relative;
   }
+  .topband{position:absolute;top:0;left:0;right:0;height:14px;
+    background:linear-gradient(to bottom, var(--red) 0 9px, var(--orange) 9px 14px);}
   .wrap{max-width:600px;margin:0 auto;}
 
-  header{text-align:center;margin-bottom:28px;}
-  h1{font-size:26px;font-weight:800;letter-spacing:.04em;}
-  .tagline{color:var(--sub);font-size:13px;margin-top:6px;}
+  header{margin-bottom:26px;}
+  .sign{background:var(--card);border:3px solid var(--red);border-radius:14px;overflow:hidden;}
+  .sign .top{display:flex;align-items:center;justify-content:space-between;
+    gap:10px;padding:14px 16px 2px;}
+  .sign h1{font-size:28px;font-weight:900;letter-spacing:.05em;}
+  .sign .num{background:var(--red);color:#fff;border-radius:10px;padding:5px 9px;
+    font-size:13px;font-weight:800;text-align:center;line-height:1.25;flex-shrink:0;}
+  .sign .rom{padding:0 16px 10px;font-size:13px;color:var(--sub);
+    letter-spacing:.18em;font-weight:700;}
+  .sign .bar{display:flex;}
+  .sign .bar i{flex:1;height:8px;background:var(--red);}
+  .sign .bar i:nth-child(2){background:var(--orange);}
+  .stops{display:flex;justify-content:space-between;padding:10px 6px 0;
+    font-size:13px;font-weight:800;color:var(--sub);}
+  .stops b{color:var(--red);}
+  .tagline{color:var(--sub);font-size:13px;margin-top:10px;text-align:center;}
+
+  .wrap{counter-reset:noriba;}
+  section h2::before{
+    counter-increment:noriba;content:"のりば " counter(noriba);
+    display:inline-block;background:var(--orange);color:#fff;border-radius:8px;
+    padding:1px 10px;font-size:13px;font-weight:800;margin-bottom:6px;letter-spacing:.05em;
+  }
+  section h2::before{margin-right:0;}
+  section h2{display:flex;flex-direction:column;align-items:flex-start;gap:2px;}
 
   .player{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;}
   .player .label{font-size:14px;font-weight:800;margin-bottom:10px;}
@@ -29,10 +54,9 @@
   .note{font-size:12px;color:var(--sub);margin:10px 2px 32px;}
 
   h2{
-    font-size:16px;font-weight:800;margin:0 0 4px;
-    padding-left:12px;border-left:5px solid var(--red);
+    font-size:17px;font-weight:900;margin:0 0 4px;
   }
-  .lead{font-size:13px;color:var(--sub);margin:0 0 14px 12px;}
+  .lead{font-size:13px;color:var(--sub);margin:0 0 14px;}
   section{margin-bottom:34px;}
 
   .who{display:flex;gap:10px;margin-bottom:6px;}
@@ -49,7 +73,7 @@
     background:var(--card);border:2px solid var(--line);border-radius:12px;
     padding:13px 14px;cursor:pointer;
   }
-  .titles label:has(input:checked){border-color:var(--red);background:#fff7f3;}
+  .titles label:has(input:checked){border-color:var(--red);background:#EEF3FF;}
   .titles input{accent-color:var(--red);width:18px;height:18px;flex-shrink:0;}
   .titles .n{font-size:12px;color:var(--sub);font-weight:800;width:1.4em;flex-shrink:0;}
   .titles .t{font-size:15px;font-weight:700;line-height:1.5;}
@@ -90,7 +114,7 @@
   .cal button.on,.cal button.on.sat,.cal button.on.sun{background:var(--red);color:#fff;}
   .picked{
     font-size:14px;font-weight:700;color:var(--ink);
-    background:#fff7f3;border:2px solid var(--line);border-radius:12px;
+    background:#EEF3FF;border:2px solid var(--line);border-radius:12px;
     padding:12px 14px;margin-bottom:10px;
   }
   .picked.none{color:var(--sub);font-weight:400;background:var(--card);}
@@ -124,17 +148,17 @@
   .bb .bw{font-size:12px;font-weight:800;margin-right:8px;}
   .bb .btm{font-size:11px;color:var(--sub);font-variant-numeric:tabular-nums;}
   .bb .bx{display:block;font-size:15px;}
-  .bb.s0{border-left-color:var(--red);} .bb.s0 .bw{color:var(--red);}
-  .bb.s1{border-left-color:#3f6fb0;} .bb.s1 .bw{color:#3f6fb0;}
-  .bb.s2{border-left-color:#3d8b52;} .bb.s2 .bw{color:#3d8b52;}
-  .bb.now{background:#fff7f3;}
+  .bb.s0{border-left-color:#D9541E;} .bb.s0 .bw{color:#D9541E;}
+  .bb.s1{border-left-color:#00379B;} .bb.s1 .bw{color:#00379B;}
+  .bb.s2{border-left-color:#2F6F5E;} .bb.s2 .bw{color:#2F6F5E;}
+  .bb.now{background:#EEF3FF;}
   #script mark{background:#ffe9a8;padding:0 2px;border-radius:3px;}
   #mini{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));
     max-width:600px;margin:0 auto;background:var(--ink);color:#fff;border-radius:999px;
     display:flex;align-items:center;gap:10px;padding:8px 10px;
     box-shadow:0 4px 16px rgba(0,0,0,.25);z-index:50;}
   #mini[hidden]{display:none;}
-  #mini button{width:44px;height:44px;border-radius:50%;border:none;background:var(--red);
+  #mini button{width:44px;height:44px;border-radius:50%;border:none;background:var(--orange);
     color:#fff;font-size:16px;cursor:pointer;flex-shrink:0;}
   #mini .mt{font-size:11px;font-variant-numeric:tabular-nums;color:#ddd;flex-shrink:0;}
   #mini input[type=range]{flex:1;min-width:40px;accent-color:var(--red);}
@@ -156,10 +180,16 @@
 </style>
 </head>
 <body>
+<div class="topband"></div>
 <div class="wrap">
 
   <header>
-    <h1>坂戸ベース</h1>
+    <div class="sign">
+      <div class="top"><h1>坂戸ベース</h1><span class="num">SB<br>01</span></div>
+      <div class="rom">SAKADO BASE ─ PODCAST</div>
+      <div class="bar"><i></i><i></i><i></i></div>
+    </div>
+    <div class="stops"><span>きたさかど</span><b>さかどベース</b><span>つぎは だい2かい</span></div>
     <p class="tagline">1989年生まれ・北坂戸の3人が月イチで集まる雑談ラジオ</p>
   </header>
 
