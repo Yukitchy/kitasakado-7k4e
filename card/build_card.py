@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """坂戸ベース 吹き出し型カード（表裏）を SVG で生成する。
 画像生成と違い、幅・正方形・高さ揃えは全部座標で保証される。"""
-import qrcode, pathlib
+import qrcode, pathlib, base64
+from PIL import Image
 
 QR_URL = "https://open.spotify.com/show/4KlYeHzLWmrgUl5CO7osx3"
 
@@ -17,6 +18,16 @@ S         = (W - PAD*2 - GAP) // 2      # 左右それぞれの正方形の一�
 TOP       = 70                          # 上ユニットの上端
 RED       = "#d8432c"
 INK       = "#d8432c"
+
+ASSETS = pathlib.Path(__file__).parent / "assets"
+
+def glyph(name):
+    """抽出済みの字形PNGをdata URIと実寸で返す（ロゴそのものの字形）"""
+    f = ASSETS / f"{name}.png"
+    w, h = Image.open(f).size
+    uri = "data:image/png;base64," + base64.b64encode(f.read_bytes()).decode()
+    return uri, w, h
+
 
 def qr_svg(url, size, x, y):
     q = qrcode.QRCode(border=0, error_correction=qrcode.constants.ERROR_CORRECT_M)
@@ -46,22 +57,36 @@ def bubble_path(mirror=False):
 FONT = "'Hiragino Sans','Hiragino Kaku Gothic ProN','Noto Sans JP',sans-serif"
 
 def card_front(red=RED):
+    uri, gw, gh = glyph("saka")
+    sw = W * 0.66
+    sh = sw * gh / gw
+    saka_img = (f'<image href="{uri}" x="{(W-sw)/2:.1f}" y="{(H-sh)/2 - H*0.02:.1f}" '
+                f'width="{sw:.1f}" height="{sh:.1f}"/>')
     return f'''<svg class="card" viewBox="-20 -20 {W+40} {H+TAIL_H+40}" xmlns="http://www.w3.org/2000/svg">
   <path d="{bubble_path()}" fill="{red}" stroke="#fff" stroke-width="26" stroke-linejoin="round"/>
-  <text x="{W/2}" y="{H/2}" text-anchor="middle" dominant-baseline="central"
-        font-family="{FONT}" font-weight="900" font-size="560" fill="#fff">坂</text>
+  {saka_img}
 </svg>'''
 
 def card_back():
     qx, qy = PAD + S + GAP, TOP           # QRは右の正方形
     qr, n = qr_svg(QR_URL, S, qx, qy)
     lx = PAD                              # 左ブロックの左端
-    # 3行の縦配分: 坂戸(150) / ベース(150) / PODCAST SINCE 2026(52) を S=390 に収める
-    h1, h2, h3 = 150, 150, 52
-    gap = (S - (h1 + h2 + h3)) / 2        # = 19
-    y1 = TOP + h1
-    y2 = y1 + gap + h2
-    y3 = y2 + gap + h3
+    # 2行は実物の字形。どちらも横幅Sに揃えるので高さは字形の比率で決まる
+    u1, w1, hh1 = glyph("line-sakado")
+    u2, w2, hh2 = glyph("line-base")
+    h1 = S * hh1 / w1
+    h2 = S * hh2 / w2
+    h3 = 54                                # PODCAST SINCE 2026
+    gap = (S - (h1 + h2 + h3)) / 2         # 3行で正方形Sを埋める
+    y1 = TOP
+    y2 = y1 + h1 + gap
+    y3 = y2 + h2 + gap
+    left_block = (
+      f'<image href="{u1}" x="{lx}" y="{y1:.1f}" width="{S}" height="{h1:.1f}"/>'
+      f'<image href="{u2}" x="{lx}" y="{y2:.1f}" width="{S}" height="{h2:.1f}"/>'
+      f'<text x="{lx}" y="{y3 + h3*0.82:.1f}" font-family="{FONT}" font-weight="900" '
+      f'font-size="{h3}" fill="{INK}" textLength="{S}" lengthAdjust="spacingAndGlyphs"'
+      f'>PODCAST SINCE 2026</text>')
     # 下三分の一: 検索窓＋配信表記
     sy   = TOP + S + 100                   # 検索窓の上端
     sh   = 96                             # 検索窓の高さ
@@ -69,12 +94,8 @@ def card_back():
     return f'''<svg class="card" viewBox="-20 -20 {W+40} {H+TAIL_H+40}" xmlns="http://www.w3.org/2000/svg">
   <path d="{bubble_path(mirror=True)}" fill="#fff" stroke="#fff" stroke-width="26" stroke-linejoin="round"/>
 
-  <!-- 左: 3行すべて textLength で横幅を S に強制（これが「揃えて」の答え） -->
-  <g font-family="{FONT}" font-weight="900" fill="{INK}">
-    <text x="{lx}" y="{y1}" font-size="{h1}" textLength="{S}" lengthAdjust="spacingAndGlyphs">坂戸</text>
-    <text x="{lx}" y="{y2}" font-size="{h2}" textLength="{S}" lengthAdjust="spacingAndGlyphs">ベース</text>
-    <text x="{lx}" y="{y3}" font-size="{h3}" textLength="{S}" lengthAdjust="spacingAndGlyphs">PODCAST SINCE 2026</text>
-  </g>
+  <!-- 左: ロゴそのものの字形を横幅{S}に揃えて3行 -->
+  {left_block}
 
   <!-- 右: QR（左ブロックと同じ一辺{S}・上端も下端も一致） -->
   {qr}
