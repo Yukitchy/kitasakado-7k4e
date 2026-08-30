@@ -93,32 +93,28 @@
   .logos input{position:absolute;opacity:0;pointer-events:none;}
   .logos img{width:100%;display:block;border-radius:8px;}
   .logos span{font-size:13px;font-weight:800;}
-  .cal{background:var(--card);border:2px solid var(--line);border-radius:12px;padding:14px 12px;margin-bottom:10px;}
-  .calnav{
-    display:grid;grid-template-columns:40px 1fr 40px;align-items:center;
-    gap:8px;margin-bottom:12px;
+  .fixed{
+    background:var(--card);border:2px solid var(--red);border-radius:12px;
+    padding:16px 18px;margin-bottom:10px;
   }
-  .calnav h3{
-    font-size:15px;font-weight:800;text-align:center;margin:0;
-    white-space:nowrap;overflow:hidden;
+  .fixed .fd{font-size:26px;font-weight:900;line-height:1.3;}
+  .fixed .fd span{font-size:16px;margin-left:2px;}
+  .fixed .ft{font-size:20px;font-weight:900;color:var(--red);margin-bottom:8px;}
+  .fixed .fp{font-size:15px;font-weight:800;line-height:1.5;}
+  .fixed .fp span{display:block;font-size:13px;font-weight:400;color:var(--sub);}
+  .fmap{display:inline-block;margin-top:10px;background:var(--orange);color:#fff;
+    text-decoration:none;font-size:13px;font-weight:800;border-radius:999px;padding:7px 16px;}
+  .fixed{
+    background:var(--card);border:2px solid var(--red);border-radius:12px;
+    padding:16px 18px;margin-bottom:10px;
   }
-  .calnav button{
-    width:40px;height:36px;padding:0;
-    border:2px solid var(--line);background:var(--card);border-radius:10px;
-    font-family:inherit;font-size:14px;line-height:1;color:var(--ink);cursor:pointer;
-  }
-  .calnav button:disabled{color:#dad4ca;border-color:#f1ede6;cursor:default;}
-  .cal table{width:100%;border-collapse:collapse;table-layout:fixed;}
-  .cal th{font-size:11px;color:var(--sub);font-weight:700;padding-bottom:6px;}
-  .cal th.sun,.cal button.sun{color:#c0453a;}
-  .cal th.sat,.cal button.sat{color:#3f6fb0;}
-  .cal td{padding:2px;text-align:center;}
-  .cal button{
-    width:100%;height:38px;border:none;background:none;border-radius:50%;
-    font-family:inherit;font-size:15px;font-weight:700;color:var(--ink);cursor:pointer;
-  }
-  .cal button:disabled{color:#d5cfc5;cursor:default;}
-  .cal button.on,.cal button.on.sat,.cal button.on.sun{background:var(--red);color:#fff;}
+  .fixed .fd{font-size:26px;font-weight:900;line-height:1.3;}
+  .fixed .fd span{font-size:16px;margin-left:2px;}
+  .fixed .ft{font-size:20px;font-weight:900;color:var(--red);margin-bottom:8px;}
+  .fixed .fp{font-size:15px;font-weight:800;line-height:1.5;}
+  .fixed .fp span{display:block;font-size:13px;font-weight:400;color:var(--sub);}
+  .fmap{display:inline-block;margin-top:10px;background:var(--orange);color:#fff;
+    text-decoration:none;font-size:13px;font-weight:800;border-radius:999px;padding:7px 16px;}
   .picked{
     font-size:14px;font-weight:700;color:var(--ink);
     background:#EEF3FF;border:2px solid var(--line);border-radius:12px;
@@ -302,11 +298,15 @@
   </section>
 
   <section>
-    <h2>次のバーミヤンいつ行ける？</h2>
-    <p class="lead">行ける日を全部タップ（何日でもOK・もう一度押すと解除）。</p>
-    <div id="picked" class="picked none">まだ選んでません</div>
-    <div id="cals"></div>
-    <input type="text" id="dateNote" placeholder="補足があれば（例：夜なら何日でもいける）">
+    <h2>第2回の収録 日程確定</h2>
+    <p class="lead">カレンダーに入れておいてください。</p>
+    <div class="fixed">
+      <div class="fd">9月29日<span>（火）</span></div>
+      <div class="ft">17:00 〜</div>
+      <div class="fp">ココス 坂戸店<span>埼玉県坂戸市片柳2171-1</span></div>
+      <a class="fmap" href="https://www.google.com/maps/search/?api=1&amp;query=%E3%82%B3%E3%82%B3%E3%82%B9+%E5%9D%82%E6%88%B8%E5%BA%97" target="_blank" rel="noopener">地図をひらく</a>
+    </div>
+    <input type="text" id="dateNote" placeholder="当日について何かあれば（例：少し遅れます）">
   </section>
 
   <div class="copybox">
@@ -508,90 +508,6 @@
     dateNote: document.getElementById('dateNote')
   };
   var whoBtns = document.querySelectorAll('.who button');
-  var WD = ['日','月','火','水','木','金','土'];
-  var picked = [];
-
-  function pad(n){ return n < 10 ? '0' + n : '' + n; }
-
-  function label(iso){
-    var p = iso.split('-');
-    var d = new Date(+p[0], +p[1] - 1, +p[2]);
-    return (+p[1]) + '/' + (+p[2]) + '(' + WD[d.getDay()] + ')';
-  }
-
-  function renderPicked(){
-    var box = document.getElementById('picked');
-    if (!picked.length){
-      box.textContent = 'まだ選んでません';
-      box.className = 'picked none';
-    } else {
-      box.textContent = picked.slice().sort().map(label).join('  ');
-      box.className = 'picked';
-    }
-  }
-
-  var today = new Date(); today.setHours(0,0,0,0);
-  var viewY = today.getFullYear(), viewM = today.getMonth();
-  var MAX_AHEAD = 6;  // 今月から6ヶ月先まで
-
-  function monthOffset(){
-    return (viewY - today.getFullYear()) * 12 + (viewM - today.getMonth());
-  }
-
-  function renderCal(){
-    var host = document.getElementById('cals');
-    var head = '<tr>' + WD.map(function(w,i){
-      return '<th class="' + (i===0?'sun':i===6?'sat':'') + '">' + w + '</th>';
-    }).join('') + '</tr>';
-    var cells = [];
-    var first = new Date(viewY, viewM, 1).getDay();
-    var days  = new Date(viewY, viewM + 1, 0).getDate();
-    for (var i = 0; i < first; i++) cells.push('<td></td>');
-    for (var day = 1; day <= days; day++){
-      var cur = new Date(viewY, viewM, day);
-      var wd = cur.getDay();
-      var iso = viewY + '-' + pad(viewM + 1) + '-' + pad(day);
-      var cls = (wd===0?'sun':wd===6?'sat':'') + (picked.indexOf(iso) >= 0 ? ' on' : '');
-      cells.push('<td><button type="button" data-d="' + iso + '" class="' + cls + '"' +
-        (cur < today ? ' disabled' : '') + '>' + day + '</button></td>');
-    }
-    while (cells.length % 7) cells.push('<td></td>');
-    var rows = '';
-    for (var j = 0; j < cells.length; j += 7) rows += '<tr>' + cells.slice(j, j+7).join('') + '</tr>';
-    var off = monthOffset();
-    host.innerHTML =
-      '<div class="cal">' +
-        '<div class="calnav" translate="no">' +
-          '<button type="button" id="prevM" aria-label="前の月"' + (off <= 0 ? ' disabled' : '') + '>&#9664;</button>' +
-          '<h3 translate="no">' + viewY + '年' + (viewM + 1) + '月</h3>' +
-          '<button type="button" id="nextM" aria-label="次の月"' + (off >= MAX_AHEAD ? ' disabled' : '') + '>&#9654;</button>' +
-        '</div>' +
-        '<table>' + head + rows + '</table>' +
-      '</div>';
-  }
-
-  function buildCal(){
-    var host = document.getElementById('cals');
-    renderCal();
-    host.addEventListener('click', function(e){
-      var nav = e.target.closest('#prevM,#nextM');
-      if (nav && !nav.disabled){
-        var d = new Date(viewY, viewM + (nav.id === 'nextM' ? 1 : -1), 1);
-        viewY = d.getFullYear(); viewM = d.getMonth();
-        renderCal();
-        return;
-      }
-      var b = e.target.closest('button[data-d]');
-      if (!b || b.disabled) return;
-      var iso = b.dataset.d;
-      var at = picked.indexOf(iso);
-      if (at >= 0) { picked.splice(at, 1); b.classList.remove('on'); }
-      else         { picked.push(iso);     b.classList.add('on'); }
-      renderPicked();
-      save();
-    });
-  }
-
   function state(){
     var t = document.querySelector('input[name=title]:checked');
     var lg = document.querySelector('input[name=logo]:checked');
@@ -603,7 +519,6 @@
       titleOwn: els.titleOwn.value,
       feedback: els.feedback.value,
       neta: els.neta.value,
-      dates: picked,
       dateNote: els.dateNote.value
     };
   }
@@ -630,14 +545,6 @@
     ['titleOwn','feedback','neta','dateNote'].forEach(function(k){
       if (s[k]) els[k].value = s[k];
     });
-    if (Array.isArray(s.dates)) {
-      var todayIso = today.getFullYear() + '-' + pad(today.getMonth() + 1) + '-' + pad(today.getDate());
-      s.dates.forEach(function(iso){
-        if (iso >= todayIso) picked.push(iso);
-      });
-      renderCal();
-    }
-    renderPicked();
   }
 
   whoBtns.forEach(function(b){
@@ -659,12 +566,7 @@
     if (s.logo)     lines.push('▼ロゴの色\n' + s.logo);
     if (s.feedback) lines.push('▼感想\n' + s.feedback);
     if (s.neta)     lines.push('▼次回話したいネタ\n' + s.neta);
-    if (s.dates && s.dates.length) {
-      lines.push('▼次いける日\n' + s.dates.slice().sort().map(label).join(' / ') +
-                 (s.dateNote ? '\n' + s.dateNote : ''));
-    } else if (s.dateNote) {
-      lines.push('▼次いける日\n' + s.dateNote);
-    }
+    lines.push('▼第2回\n9/29(火) 17:00〜 ココス坂戸店' + (s.dateNote ? '\n' + s.dateNote : ''));
     return lines.join('\n\n');
   }
 
@@ -697,7 +599,6 @@
     }
   });
 
-  buildCal();
   restore();
 })();
 </script>
