@@ -86,12 +86,12 @@
   textarea:focus,input[type=text]:focus{outline:none;border-color:var(--red);}
   textarea{min-height:100px;}
 
-  .logos{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
-  .logos label{display:flex;flex-direction:column;gap:4px;align-items:center;cursor:pointer;
-    background:var(--card);border:2px solid var(--line);border-radius:12px;padding:10px 6px 8px;}
+  .logos{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+  .logos label{display:flex;flex-direction:column;gap:6px;align-items:center;cursor:pointer;
+    background:var(--card);border:2px solid var(--line);border-radius:12px;padding:8px 8px 8px;}
   .logos label:has(input:checked){border-color:var(--red);background:#EEF3FF;}
   .logos input{position:absolute;opacity:0;pointer-events:none;}
-  .logos img{width:100%;max-width:110px;display:block;}
+  .logos img{width:100%;display:block;border-radius:8px;}
   .logos span{font-size:13px;font-weight:800;}
   .cal{background:var(--card);border:2px solid var(--line);border-radius:12px;padding:14px 12px;margin-bottom:10px;}
   .calnav{
@@ -268,14 +268,18 @@
 
   <section>
     <h2>ロゴの色 どれがいい？</h2>
-    <p class="lead">タップで1つ。形は確定済みで色だけ決めます。</p>
+    <p class="lead">Spotifyに出る正方形アートワーク（背景こみ）そのままの10案。タップで1つ。</p>
     <div class="logos">
-      <label><input type="radio" name="logo" value="1 赤"><img src="img/logovote/1.png" alt="赤"><span>1 赤</span></label>
-      <label><input type="radio" name="logo" value="2 オレンジ"><img src="img/logovote/2.png" alt="オレンジ"><span>2 オレンジ</span></label>
-      <label><input type="radio" name="logo" value="3 東上線ブルー"><img src="img/logovote/3.png" alt="東上線ブルー"><span>3 東上線ブルー</span></label>
-      <label><input type="radio" name="logo" value="4 紺×オレンジ"><img src="img/logovote/4.png" alt="紺×オレンジ"><span>4 紺×オレンジ</span></label>
-      <label><input type="radio" name="logo" value="5 坂戸スカイ"><img src="img/logovote/5.png" alt="坂戸スカイ"><span>5 坂戸スカイ</span></label>
-      <label><input type="radio" name="logo" value="6 黄×黒"><img src="img/logovote/6.png" alt="黄×黒"><span>6 黄×黒</span></label>
+      <label><input type="radio" name="logo" value="1 クリーム×赤"><img src="img/logovote/1.png" alt="クリーム×赤"><span>1 クリーム×赤</span></label>
+      <label><input type="radio" name="logo" value="2 クリーム×オレンジ"><img src="img/logovote/2.png" alt="クリーム×オレンジ"><span>2 クリーム×オレンジ</span></label>
+      <label><input type="radio" name="logo" value="3 生成り×紺"><img src="img/logovote/3.png" alt="生成り×紺"><span>3 生成り×紺</span></label>
+      <label><input type="radio" name="logo" value="4 ライトグレー×紺"><img src="img/logovote/4.png" alt="ライトグレー×紺"><span>4 ライトグレー×紺</span></label>
+      <label><input type="radio" name="logo" value="5 濃紺×オレンジ"><img src="img/logovote/5.png" alt="濃紺×オレンジ"><span>5 濃紺×オレンジ</span></label>
+      <label><input type="radio" name="logo" value="6 白×紺 オレンジ差し"><img src="img/logovote/6.png" alt="白×紺 オレンジ差し"><span>6 白×紺 オレンジ差し</span></label>
+      <label><input type="radio" name="logo" value="7 ロイヤルブルー×白"><img src="img/logovote/7.png" alt="ロイヤルブルー×白"><span>7 ロイヤルブルー×白</span></label>
+      <label><input type="radio" name="logo" value="8 黒×黄"><img src="img/logovote/8.png" alt="黒×黄"><span>8 黒×黄</span></label>
+      <label><input type="radio" name="logo" value="9 ベージュ×こげ茶"><img src="img/logovote/9.png" alt="ベージュ×こげ茶"><span>9 ベージュ×こげ茶</span></label>
+      <label><input type="radio" name="logo" value="10 オレンジ×紺"><img src="img/logovote/10.png" alt="オレンジ×紺"><span>10 オレンジ×紺</span></label>
     </div>
   </section>
 
