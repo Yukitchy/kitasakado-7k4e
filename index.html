@@ -286,6 +286,23 @@
   </section>
 
   <section>
+    <h2>サブタイトル どれがいい？</h2>
+    <p class="lead">番組名の後半。「厚木トーク｜厚木のしゃべり場」と同じ型です。タップで1つ。</p>
+    <div class="titles">
+      <label><input type="radio" name="subtitle" value="1 平成おじの雑談基地"><span class="n">1</span><span class="t">坂戸ベース｜平成おじの雑談基地</span></label>
+      <label><input type="radio" name="subtitle" value="2 平成おじのしゃべり場"><span class="n">2</span><span class="t">坂戸ベース｜平成おじのしゃべり場</span></label>
+      <label><input type="radio" name="subtitle" value="3 平成おじラジオ"><span class="n">3</span><span class="t">坂戸ベース｜平成おじラジオ</span></label>
+      <label><input type="radio" name="subtitle" value="4 平成おじのファミレス会議"><span class="n">4</span><span class="t">坂戸ベース｜平成おじのファミレス会議</span></label>
+      <label><input type="radio" name="subtitle" value="5 平成おじの帰省ラジオ"><span class="n">5</span><span class="t">坂戸ベース｜平成おじの帰省ラジオ</span></label>
+      <label><input type="radio" name="subtitle" value="6 北坂戸育ちの平成おじトーク"><span class="n">6</span><span class="t">坂戸ベース｜北坂戸育ちの平成おじトーク</span></label>
+      <label><input type="radio" name="subtitle" value="7 平成おじのドリンクバー放談"><span class="n">7</span><span class="t">坂戸ベース｜平成おじのドリンクバー放談</span></label>
+      <label><input type="radio" name="subtitle" value="8 平成おじの地元トーク"><span class="n">8</span><span class="t">坂戸ベース｜平成おじの地元トーク</span></label>
+      <label><input type="radio" name="subtitle" value="9 平成おじが集まる口実"><span class="n">9</span><span class="t">坂戸ベース｜平成おじが集まる口実</span></label>
+      <label><input type="radio" name="subtitle" value="10 平成おじの思い出の店めぐり"><span class="n">10</span><span class="t">坂戸ベース｜平成おじの思い出の店めぐり</span></label>
+    </div>
+  </section>
+
+  <section>
     <h2>聴いた感想</h2>
     <p class="lead">「◯◯の話もっと聴きたい」だけでも十分。ここが一番ほしい。</p>
     <textarea id="feedback" placeholder="例：尿酸値のくだり、他人事じゃなくて笑った"></textarea>
@@ -509,10 +526,12 @@
   var whoBtns = document.querySelectorAll('.who button');
   function state(){
     var lg = document.querySelector('input[name=logo]:checked');
+    var st = document.querySelector('input[name=subtitle]:checked');
     var w = document.querySelector('.who button[aria-pressed=true]');
     return {
       who: w ? w.dataset.name : '',
       logo: lg ? lg.value : '',
+      subtitle: st ? st.value : '',
       feedback: els.feedback.value,
       neta: els.neta.value,
       dateNote: els.dateNote.value
@@ -534,6 +553,10 @@
       var lr = document.querySelector('input[name=logo][value="' + s.logo.replace(/"/g,'\\"') + '"]');
       if (lr) lr.checked = true;
     }
+    if (s.subtitle) {
+      var sr = document.querySelector('input[name=subtitle][value="' + s.subtitle.replace(/"/g,'\\"') + '"]');
+      if (sr) sr.checked = true;
+    }
     ['feedback','neta','dateNote'].forEach(function(k){
       if (s[k]) els[k].value = s[k];
     });
@@ -545,7 +568,7 @@
       save();
     });
   });
-  document.querySelectorAll('input[name=logo]').forEach(function(r){
+  document.querySelectorAll('input[name=logo],input[name=subtitle]').forEach(function(r){
     r.addEventListener('change', save);
   });
   Object.keys(els).forEach(function(k){ els[k].addEventListener('input', save); });
@@ -554,6 +577,7 @@
     var s = state();
     var lines = ['【坂戸ベース 第1回】' + (s.who || '')];
     if (s.logo)     lines.push('▼ロゴの色\n' + s.logo);
+    if (s.subtitle) lines.push('▼サブタイトル案\n' + s.subtitle);
     if (s.feedback) lines.push('▼感想\n' + s.feedback);
     if (s.neta)     lines.push('▼次回話したいネタ\n' + s.neta);
     lines.push('▼第2回\n9/29(火) 17:00〜 ココス坂戸店' + (s.dateNote ? '\n' + s.dateNote : ''));
