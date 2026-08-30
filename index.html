@@ -52,6 +52,10 @@
   .player .label{font-size:14px;font-weight:800;margin-bottom:10px;}
   audio{width:100%;}
   .note{font-size:12px;color:var(--sub);margin:10px 2px 32px;}
+  .listen{margin-top:14px;}
+  .sp{display:block;text-align:center;background:#1DB954;color:#fff;text-decoration:none;
+    font-size:15px;font-weight:800;border-radius:999px;padding:13px;}
+  .lnote{font-size:12px;color:var(--sub);margin-top:8px;text-align:center;}
 
   h2{
     font-size:17px;font-weight:900;margin:0 0 4px;
@@ -206,8 +210,12 @@
   </header>
 
   <div class="player">
-    <div class="label">▶ 第1回（32分・BGM入り編集済み）</div>
+    <div class="label">▶ 第1回「坂戸ベース開局」（32分）</div>
     <audio controls preload="none" src="ep0.mp3" id="ep"></audio>
+    <div class="listen">
+      <a class="sp" href="https://open.spotify.com/show/4KlYeHzLWmrgUl5CO7osx3" target="_blank" rel="noopener">Spotifyで聴く・フォローする</a>
+      <p class="lnote">Apple Podcasts・Amazon Musicなど他のアプリにも配信申請中です。</p>
+    </div>
   </div>
   <p class="note">※このページはURLを知っている3人だけの共有用です。拡散はしないでください。<br>話した内容：自己紹介／健康診断と尿酸値／睡眠サイクル論争／百名山98座／インバウンド／地元の昔の名店</p>
 
@@ -242,24 +250,6 @@
       <button type="button" data-name="大場先生" aria-pressed="false">大場先生</button>
       <button type="button" data-name="いっちゃん" aria-pressed="false">いっちゃん</button>
     </div>
-  </section>
-
-  <section>
-    <h2>第1回のタイトル、どれがいい？</h2>
-    <p class="lead">回のタイトル（番組名は「坂戸ベース」で決定）。ピンとこなければ一番下に書いて。</p>
-    <div class="titles">
-      <label><input type="radio" name="title" value="坂戸ベース開局"><span class="n">1</span><span class="t">坂戸ベース開局</span></label>
-      <label><input type="radio" name="title" value="坂戸ベース本日開局"><span class="n">2</span><span class="t">坂戸ベース本日開局</span></label>
-      <label><input type="radio" name="title" value="祝 坂戸ベース開局"><span class="n">3</span><span class="t">祝 坂戸ベース開局</span></label>
-      <label><input type="radio" name="title" value="坂戸ベース開局しました"><span class="n">4</span><span class="t">坂戸ベース開局しました</span></label>
-      <label><input type="radio" name="title" value="バーミヤンより開局のお知らせ"><span class="n">5</span><span class="t">バーミヤンより開局のお知らせ</span></label>
-      <label><input type="radio" name="title" value="北坂戸に秘密基地が開局"><span class="n">6</span><span class="t">北坂戸に秘密基地が開局</span></label>
-      <label><input type="radio" name="title" value="開局初日から尿酸値の話"><span class="n">7</span><span class="t">開局初日から尿酸値の話</span></label>
-      <label><input type="radio" name="title" value="坂戸ベース開局の夜"><span class="n">8</span><span class="t">坂戸ベース開局の夜</span></label>
-      <label><input type="radio" name="title" value="開局記念 第1回放送"><span class="n">9</span><span class="t">開局記念 第1回放送</span></label>
-      <label><input type="radio" name="title" value="月イチ開局 坂戸ベース"><span class="n">10</span><span class="t">月イチ開局 坂戸ベース</span></label>
-    </div>
-    <input type="text" id="titleOwn" placeholder="自分で考えるならここに（任意）" style="margin-top:8px;">
   </section>
 
   <section>
@@ -502,21 +492,17 @@
 (function(){
   var KEY = 'sakado-base-ep1';
   var els = {
-    titleOwn: document.getElementById('titleOwn'),
     feedback: document.getElementById('feedback'),
     neta:     document.getElementById('neta'),
     dateNote: document.getElementById('dateNote')
   };
   var whoBtns = document.querySelectorAll('.who button');
   function state(){
-    var t = document.querySelector('input[name=title]:checked');
     var lg = document.querySelector('input[name=logo]:checked');
     var w = document.querySelector('.who button[aria-pressed=true]');
     return {
       who: w ? w.dataset.name : '',
-      title: t ? t.value : '',
       logo: lg ? lg.value : '',
-      titleOwn: els.titleOwn.value,
       feedback: els.feedback.value,
       neta: els.neta.value,
       dateNote: els.dateNote.value
@@ -534,15 +520,11 @@
     if (s.who) whoBtns.forEach(function(b){
       b.setAttribute('aria-pressed', b.dataset.name === s.who ? 'true' : 'false');
     });
-    if (s.title) {
-      var r = document.querySelector('input[name=title][value="' + s.title.replace(/"/g,'\\"') + '"]');
-      if (r) r.checked = true;
-    }
     if (s.logo) {
       var lr = document.querySelector('input[name=logo][value="' + s.logo.replace(/"/g,'\\"') + '"]');
       if (lr) lr.checked = true;
     }
-    ['titleOwn','feedback','neta','dateNote'].forEach(function(k){
+    ['feedback','neta','dateNote'].forEach(function(k){
       if (s[k]) els[k].value = s[k];
     });
   }
@@ -553,7 +535,7 @@
       save();
     });
   });
-  document.querySelectorAll('input[name=title], input[name=logo]').forEach(function(r){
+  document.querySelectorAll('input[name=logo]').forEach(function(r){
     r.addEventListener('change', save);
   });
   Object.keys(els).forEach(function(k){ els[k].addEventListener('input', save); });
@@ -561,8 +543,6 @@
   function buildText(){
     var s = state();
     var lines = ['【坂戸ベース 第1回】' + (s.who || '')];
-    var t = s.titleOwn ? s.titleOwn + '（自分で考えた案）' : s.title;
-    if (t)          lines.push('▼タイトルはこれ\n' + t);
     if (s.logo)     lines.push('▼ロゴの色\n' + s.logo);
     if (s.feedback) lines.push('▼感想\n' + s.feedback);
     if (s.neta)     lines.push('▼次回話したいネタ\n' + s.neta);
