@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>坂戸ベース 共有ページ リデザイン5案</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+  background:#EAE8E2;color:#1b1b1f;-webkit-font-smoothing:antialiased;line-height:1.75;
+  word-break:auto-phrase;overflow-wrap:anywhere}
+h1,h2,h3,button{text-wrap:balance}
+/* ══ ロゴ色ピッカー ══ */
+.logopick{max-width:430px;margin:20px auto 6px;padding:0 16px}
+.logopick h2{font-size:16px;font-weight:900;margin-bottom:10px}
+.lgstage{border-radius:22px;padding:44px 0 56px;display:grid;place-items:center;
+  background:var(--lg-bg,#F0EAD8);transition:background .25s}
+.lgstage .blogo{background:var(--lg-bub,#D9541E);color:var(--lg-txt,#fff);
+  padding:24px 28px 20px;border-radius:30px;transition:background .25s,color .25s}
+.lgstage .blogo::after{border-bottom-color:var(--lg-bub,#D9541E);transition:border-color .25s}
+.lgname{text-align:center;font-size:14px;font-weight:800;margin:10px 0 12px}
+.lgrow{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.lgrow button{position:relative;height:52px;border-radius:12px;border:2.5px solid transparent;
+  cursor:pointer;background:var(--b);overflow:hidden;padding:0}
+.lgrow button i{position:absolute;inset:12px 14px;border-radius:8px;background:var(--f)}
+.lgrow button span{position:absolute;left:5px;top:2px;font-size:13px;font-weight:800;
+  color:#fff;mix-blend-mode:difference}
+.lgrow button[aria-selected="true"]{border-color:#1b1b1f}
+.picker{position:sticky;top:0;z-index:30;background:rgba(234,232,226,.97);
+  backdrop-filter:blur(8px);padding:10px 14px;display:flex;gap:8px;overflow-x:auto;
+  border-bottom:1px solid #d8d5cd;scrollbar-width:none}
+.picker::-webkit-scrollbar{display:none}
+.picker button{flex-shrink:0;font-family:inherit;font-size:13px;font-weight:800;
+  padding:9px 16px;border-radius:999px;border:none;background:#fff;color:#6b6b76;cursor:pointer}
+.picker button[aria-selected="true"]{background:#1b1b1f;color:#fff}
+.note{max-width:620px;margin:14px auto 0;padding:0 16px;font-size:13px;color:#6b6b76}
+section{padding:18px 0 40px}
+section[hidden]{display:none}
+.frame{max-width:430px;margin:0 auto;border-radius:22px;overflow:hidden;
+  box-shadow:0 18px 48px rgba(20,20,30,.18)}
+.desc{max-width:430px;margin:12px auto 0;padding:0 6px;font-size:13px;color:#55555e}
+.desc b{color:#1b1b1f}
+
+/* 共通: 吹き出しロゴ（角丸+左下しっぽ） */
+.blogo{position:relative;display:inline-block;border-radius:26%/26%;
+  font-weight:900;text-align:center;line-height:1.06;letter-spacing:.02em}
+.blogo::after{content:"";position:absolute;left:14%;top:99%;
+  border-style:solid;border-width:0 0 26px 22px;border-color:transparent}
+.blogo .s1{display:block;font-size:34px}
+.blogo .s2{display:block;font-size:34px}
+.blogo .s3{display:block;font-size:8.5px;font-weight:700;letter-spacing:.14em;margin-top:6px}
+
+/* ══ 案1 会話ログ ══ */
+.p1{background:#F4EFE4;padding:26px 18px 34px}
+.p1 .head{text-align:center;margin-bottom:6px}
+.p1 .blogo{background:#D9541E;color:#fff;padding:22px 26px 18px;border-radius:28px}
+.p1 .blogo::after{border-bottom-color:#D9541E}
+.p1 .tagline{font-size:13px;color:#6b655a;margin:18px 0 22px;text-align:center}
+.p1 .msg{position:relative;background:#fff;border-radius:20px;padding:14px 16px;
+  margin:14px 0 14px 12px;max-width:88%}
+.p1 .msg::after{content:"";position:absolute;left:-8px;top:18px;
+  border-style:solid;border-width:0 0 14px 12px;border-color:transparent;
+  border-bottom-color:#fff;transform:rotate(90deg)}
+.p1 .msg.me{margin-left:auto;margin-right:12px;background:#1F3B63;color:#fff}
+.p1 .msg.me::after{left:auto;right:-8px;border-bottom-color:#1F3B63;transform:rotate(-90deg)}
+.p1 .who{font-size:13px;font-weight:800;color:#D9541E;margin-bottom:2px}
+.p1 .msg.me .who{color:#F5B840}
+.p1 .msg p{font-size:14px}
+.p1 .play{display:flex;align-items:center;gap:12px;background:#fff;border-radius:999px;
+  padding:10px 14px;margin:20px 0}
+.p1 .play .pb{width:44px;height:44px;border-radius:50%;background:#D9541E;color:#fff;
+  display:grid;place-items:center;font-size:15px;flex-shrink:0}
+.p1 .play .tt{font-size:13px;font-weight:800}
+.p1 .play .tm{font-size:13px;color:#6b655a}
+.p1 .cta{display:block;text-align:center;background:#D9541E;color:#fff;border-radius:999px;
+  padding:15px;font-size:15px;font-weight:800;margin-top:22px}
+
+/* ══ 案2 駅名標 ══ */
+.p2{background:#fff;padding-bottom:34px}
+.p2 .band{height:10px;background:#00379B}
+.p2 .band.or{background:#F5A200;height:6px}
+.p2 .sign{margin:22px 18px 8px;border:3px solid #00379B;border-radius:14px;overflow:hidden}
+.p2 .sign .top{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px}
+.p2 .sign .st{font-size:30px;font-weight:900;letter-spacing:.06em}
+.p2 .sign .num{background:#00379B;color:#fff;border-radius:10px;padding:6px 9px;
+  font-size:13px;font-weight:800;text-align:center;line-height:1.2}
+.p2 .sign .rom{padding:0 16px 10px;font-size:13px;color:#55555e;letter-spacing:.18em;font-weight:700}
+.p2 .sign .bar{display:flex}
+.p2 .sign .bar i{flex:1;height:8px;background:#F5A200}
+.p2 .sign .bar i:first-child{background:#00379B}
+.p2 .sign .bar i:last-child{background:#00379B}
+.p2 .stops{display:flex;justify-content:space-between;padding:12px 22px 0;font-size:13px;font-weight:800;color:#55555e}
+.p2 .stops b{color:#00379B}
+.p2 .secline{margin:24px 18px 0;border-top:1px solid #e3e1da;padding-top:18px}
+.p2 .chip{display:inline-block;background:#F5A200;color:#fff;border-radius:8px;
+  padding:3px 10px;font-size:13px;font-weight:800;margin-bottom:8px}
+.p2 h3{font-size:17px;font-weight:900}
+.p2 .li{display:flex;gap:10px;align-items:baseline;padding:10px 2px;border-bottom:1px solid #f0eee8;font-size:14px}
+.p2 .li .t{color:#00379B;font-weight:800;font-size:13px;flex-shrink:0}
+.p2 .cta{display:block;margin:24px 18px 0;text-align:center;background:#00379B;color:#fff;
+  border-radius:12px;padding:15px;font-size:15px;font-weight:800}
+
+/* ══ 案3 バーミヤン品書き ══ */
+.p3{background:#F3E6CE;padding:24px 18px 34px}
+.p3 .menu{background:#FFFDF6;border-radius:6px;padding:24px 20px;
+  outline:2px solid #57332B;outline-offset:-10px}
+.p3 .mh{text-align:center;margin-bottom:4px}
+.p3 .blogo{background:#57332B;color:#F3E6CE;padding:18px 20px 14px;border-radius:24px;transform:scale(.82)}
+.p3 .blogo::after{border-bottom-color:#57332B}
+.p3 .sub{text-align:center;font-size:13px;color:#8a6a52;letter-spacing:.3em;font-weight:700;margin:2px 0 18px}
+.p3 .dish{display:flex;align-items:baseline;gap:8px;padding:11px 2px;font-size:14px}
+.p3 .dish .nm{font-weight:800}
+.p3 .dish .dots{flex:1;border-bottom:2px dotted #cdb99b;transform:translateY(-4px)}
+.p3 .dish .pr{font-weight:800;color:#B03A2E;font-size:13px}
+.p3 .stamp{width:74px;height:74px;border:3px solid #B03A2E;border-radius:50%;color:#B03A2E;
+  display:grid;place-items:center;font-size:13px;font-weight:900;transform:rotate(-12deg);
+  margin:16px 0 0 auto;text-align:center;line-height:1.3;opacity:.85}
+.p3 .cta{display:block;text-align:center;background:#B03A2E;color:#fff;border-radius:8px;
+  padding:14px;font-size:15px;font-weight:800;margin-top:14px}
+
+/* ══ 案4 深夜スタジオ ══ */
+.p4{background:#101A2E;color:#EDEDE6;padding:26px 18px 34px}
+.p4 .onair{display:inline-flex;align-items:center;gap:8px;border:2px solid #D9541E;color:#FF7A3D;
+  border-radius:8px;padding:5px 12px;font-size:13px;font-weight:900;letter-spacing:.2em}
+.p4 .onair i{width:9px;height:9px;border-radius:50%;background:#FF7A3D}
+.p4 .head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:26px}
+.p4 .blogo{background:#D9541E;color:#fff;padding:20px 24px 16px;border-radius:26px}
+.p4 .blogo::after{border-bottom-color:#D9541E}
+.p4 .big{font-size:24px;font-weight:900;line-height:1.5;margin:8px 0 4px}
+.p4 .sub{font-size:13px;color:#9aa3b5}
+.p4 .wave{display:flex;align-items:flex-end;gap:4px;height:46px;margin:22px 0}
+.p4 .wave i{flex:1;background:#31507F;border-radius:3px}
+.p4 .wave i.hot{background:#D9541E}
+.p4 .row{display:flex;justify-content:space-between;align-items:center;
+  padding:13px 2px;border-bottom:1px solid #223252;font-size:14px}
+.p4 .row .t{color:#FF9F6B;font-weight:800;font-size:13px}
+.p4 .cta{display:block;text-align:center;background:#F5B840;color:#1b1b1f;border-radius:999px;
+  padding:15px;font-size:15px;font-weight:900;margin-top:24px}
+
+/* ══ 案5 回覧板 ══ */
+.p5{background:#F6F3EA;padding:24px 16px 34px}
+.p5 .paper{background:#fff;padding:22px 18px 26px;border-top:8px solid #1F3B63}
+.p5 .kai{display:flex;align-items:center;gap:12px;border-bottom:3px double #1F3B63;padding-bottom:14px;margin-bottom:16px}
+.p5 .kai .box{background:#1F3B63;color:#fff;writing-mode:vertical-rl;font-weight:900;
+  font-size:15px;letter-spacing:.3em;padding:12px 8px;border-radius:4px}
+.p5 .kai h3{font-size:25px;font-weight:900;line-height:1.4}
+.p5 .kai .d{font-size:13px;color:#6b6b76}
+.p5 .col{column-count:2;column-gap:18px;column-rule:1px solid #e3e1da;font-size:13px;color:#3a3a42;margin-bottom:16px}
+.p5 .col b{color:#1F3B63}
+.p5 .hd{background:#1F3B63;color:#fff;display:inline-block;padding:3px 12px;font-size:13px;font-weight:800;margin:10px 0 6px}
+.p5 .li{display:flex;gap:10px;padding:8px 0;border-bottom:1px dotted #cfcdc4;font-size:14px}
+.p5 .li .t{font-weight:800;color:#B03A2E;font-size:13px;flex-shrink:0}
+.p5 .hanko{width:56px;height:56px;border:2.5px solid #B03A2E;border-radius:50%;color:#B03A2E;
+  display:grid;place-items:center;font-size:15px;font-weight:900;margin:14px 4px 0 auto;transform:rotate(6deg)}
+.p5 .cta{display:block;text-align:center;background:#B03A2E;color:#fff;border-radius:6px;
+  padding:14px;font-size:15px;font-weight:800;margin-top:12px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="logopick" id="logopick">
+  <h2>まずロゴの色 どれにする？</h2>
+  <div class="lgstage" id="lgStage">
+    <span class="blogo"><span class="s1">坂戸</span><span class="s2">ベース</span><span class="s3">PODCAST SINCE 2026</span></span>
+  </div>
+  <p class="lgname" id="lgName"></p>
+  <div class="lgrow" id="lgRow"></div>
+</div>
+
+<div class="picker" id="picker">
+  <button data-p="a1" aria-selected="true">案1 会話ログ</button>
+  <button data-p="a2" aria-selected="false">案2 駅名標</button>
+  <button data-p="a3" aria-selected="false">案3 品書き</button>
+  <button data-p="a4" aria-selected="false">案4 深夜スタジオ</button>
+  <button data-p="a5" aria-selected="false">案5 回覧板</button>
+</div>
+<p class="note">吹き出しロゴと東上線カラー10案に寄せた共有ページのリデザイン案。色はどの番号にも差し替え可能。</p>
+
+<!-- 案1 会話ログ: ページ全体をLINEのトーク画面の文法で -->
+<section id="a1">
+<div class="frame"><div class="p1">
+  <div class="head"><span class="blogo"><span class="s1">坂戸</span><span class="s2">ベース</span><span class="s3">PODCAST SINCE 2026</span></span></div>
+  <p class="tagline">1989年生まれ・北坂戸の3人が月イチで集まる雑談ラジオ</p>
+  <div class="play"><span class="pb">▶</span><span><span class="tt">第1回（32分）</span><br><span class="tm">バーミヤン北坂戸にて収録</span></span></div>
+  <div class="msg"><div class="who">坂戸ベース</div><p>第1回のタイトル、どれがいい？10案から選んでね</p></div>
+  <div class="msg me"><div class="who">あなた</div><p>「開局初日から尿酸値の話」で</p></div>
+  <div class="msg"><div class="who">坂戸ベース</div><p>次のバーミヤンいつ行ける？カレンダーをタップ</p></div>
+  <span class="cta">LINEに貼る文をコピー</span>
+</div></div>
+<p class="desc"><b>ロゴ＝吹き出しをそのままUI言語に。</b>投票も感想もぜんぶ「トークの返信」の見た目で答えていく。3人のLINEグループに貼る文化と地続き。色は01オレンジ基調（どの番号にも変更可）。</p>
+</section>
+
+<!-- 案2 駅名標: 東武東上線の駅サインの文法で -->
+<section id="a2" hidden>
+<div class="frame"><div class="p2">
+  <div class="band"></div><div class="band or"></div>
+  <div class="sign">
+    <div class="top"><span class="st">坂戸ベース</span><span class="num">SB<br>01</span></div>
+    <div class="rom">SAKADO BASE ─ PODCAST</div>
+    <div class="bar"><i></i><i></i><i></i></div>
+  </div>
+  <div class="stops"><span>きたさかど</span><b>さかどベース</b><span>つぎは だい2かい</span></div>
+  <div class="secline"><span class="chip">のりば1</span><h3>第1回を聴く（32分）</h3></div>
+  <div class="secline"><span class="chip">のりば2</span><h3>タイトル投票</h3>
+    <div class="li"><span class="t">案4</span>開局初日から尿酸値の話</div>
+    <div class="li"><span class="t">案2</span>帰ってくる口実を作りました</div>
+  </div>
+  <span class="cta">LINEに貼る文をコピー</span>
+</div></div>
+<p class="desc"><b>東上線カラーを一番ストレートに使う案。</b>ヘッダーが駅名標、セクションが「のりば」、前後の駅に前回・次回。10案の色（紺02/04・青10など）がそのまま路線帯になる。</p>
+</section>
+
+<!-- 案3 品書き: 収録場所バーミヤンのメニュー表の文法で -->
+<section id="a3" hidden>
+<div class="frame"><div class="p3">
+  <div class="menu">
+    <div class="mh"><span class="blogo"><span class="s1">坂戸</span><span class="s2">ベース</span><span class="s3">PODCAST SINCE 2026</span></span></div>
+    <p class="sub">お品書き</p>
+    <div class="dish"><span class="nm">第1回を聴く</span><span class="dots"></span><span class="pr">32分</span></div>
+    <div class="dish"><span class="nm">タイトル投票</span><span class="dots"></span><span class="pr">10案</span></div>
+    <div class="dish"><span class="nm">聴いた感想</span><span class="dots"></span><span class="pr">ひとくち</span></div>
+    <div class="dish"><span class="nm">次回のネタ</span><span class="dots"></span><span class="pr">おかわり</span></div>
+    <div class="dish"><span class="nm">次いつ行ける？</span><span class="dots"></span><span class="pr">予約</span></div>
+    <div class="stamp">月イチ<br>営業</div>
+    <span class="cta">LINEに貼る文をコピー</span>
+  </div>
+</div></div>
+<p class="desc"><b>収録場所＝ファミレスをネタにした品書き風。</b>色は05ベージュ×こげ茶。各セクションがメニューの一品で、値段の位置に「32分」「10案」。ゆるさと手作り感が3人の距離感に合う。</p>
+</section>
+
+<!-- 案4 深夜スタジオ: 濃紺03の夜の放送室 -->
+<section id="a4" hidden>
+<div class="frame"><div class="p4">
+  <div class="head">
+    <div><span class="onair"><i></i>ON AIR</span>
+      <p class="big">第1回 配信中</p>
+      <p class="sub">2026.8.18 バーミヤン北坂戸</p></div>
+    <span class="blogo"><span class="s1" style="font-size:22px">坂戸</span><span class="s2" style="font-size:22px">ベース</span><span class="s3" style="font-size:6.5px">PODCAST SINCE 2026</span></span>
+  </div>
+  <div class="wave"><i style="height:30%"></i><i style="height:55%"></i><i class="hot" style="height:90%"></i><i style="height:45%"></i><i style="height:70%"></i><i class="hot" style="height:100%"></i><i style="height:38%"></i><i style="height:62%"></i><i style="height:26%"></i><i class="hot" style="height:80%"></i><i style="height:50%"></i><i style="height:34%"></i></div>
+  <div class="row"><span>タイトル投票</span><span class="t">10案から選ぶ</span></div>
+  <div class="row"><span>聴いた感想</span><span class="t">書く</span></div>
+  <div class="row"><span>次回日程</span><span class="t">カレンダー</span></div>
+  <span class="cta">LINEに貼る文をコピー</span>
+</div></div>
+<p class="desc"><b>10案の03（濃紺×オレンジ）をそのまま画面に。</b>唯一のダーク案。深夜ラジオの放送室のトーンで、再生まわりが一番かっこよく見える。文字情報が多い投票ページとしては好み分かれ枠。</p>
+</section>
+
+<!-- 案5 回覧板: 地元の学級新聞・回覧板の文法で -->
+<section id="a5" hidden>
+<div class="frame"><div class="p5">
+  <div class="paper">
+    <div class="kai"><span class="box">回覧</span><div><h3>坂戸ベースだより 創刊号</h3><p class="d">2026年8月18日発行 バーミヤン北坂戸支局</p></div></div>
+    <div class="col">埼玉・北坂戸の地元の友達3人がラジオを開局。自己紹介から<b>健康診断と尿酸値</b>、<b>百名山98座</b>、<b>睡眠サイクル論争</b>、<b>地元の昔の名店</b>まで32分。月1回バーミヤンに集まって収録していく。</div>
+    <div class="hd">議題1 タイトル投票</div>
+    <div class="li"><span class="t">案4</span>開局初日から尿酸値の話</div>
+    <div class="li"><span class="t">案1</span>泉町3-6-1に基地ができた</div>
+    <div class="hd">議題2 次回いつ集まる？</div>
+    <div class="li"><span class="t">日程</span>カレンダーをタップして選ぶ</div>
+    <div class="hanko">済</div>
+    <span class="cta">LINEに貼る文をコピー</span>
+  </div>
+</div></div>
+<p class="desc"><b>地元の回覧板・学級新聞の文法。</b>色は07生成り×紺。読み物（文庫版）と一番相性がよく、2段組の記事として要約が載る。回して「済」のハンコ＝回答完了の演出。</p>
+</section>
+
+<script>
+(function(){
+  // ロゴ色10案（東上線カラーシートの再現。字形は本番はロゴ原本の抽出字形）
+  var C=[
+    ["01","クリーム × オレンジ","#F0EAD8","#D9541E","#fff"],
+    ["02","ライトグレー × 紺","#E2E7EA","#2B4C9B","#fff"],
+    ["03","濃紺 × オレンジ","#161F35","#D9541E","#fff"],
+    ["04","グレー × 紺","#B9BEC4","#2B4C9B","#fff"],
+    ["05","ベージュ × こげ茶","#E7D9BE","#4A2C26","#fff"],
+    ["06","黒 × 黄","#22252A","#E8B92E","#22252A"],
+    ["07","生成り × 紺","#F0EDE4","#1F2C4D","#fff"],
+    ["08","チャコール × オレンジ","#333B49","#D9541E","#fff"],
+    ["09","ブルーグレー × 青","#DCE3E4","#2E6E8E","#fff"],
+    ["10","ロイヤルブルー × 白","#24469B","#FDFDF8","#1F2C4D"]
+  ];
+  var row=document.getElementById('lgRow'),stage=document.getElementById('lgStage'),
+      name=document.getElementById('lgName');
+  function pick(i){
+    var c=C[i];
+    stage.style.setProperty('--lg-bg',c[2]);
+    stage.style.setProperty('--lg-bub',c[3]);
+    stage.style.setProperty('--lg-txt',c[4]);
+    name.textContent=c[0]+' '+c[1];
+    row.querySelectorAll('button').forEach(function(b,j){
+      b.setAttribute('aria-selected',j===i?'true':'false');});
+  }
+  C.forEach(function(c,i){
+    var b=document.createElement('button');
+    b.style.setProperty('--b',c[2]); b.style.setProperty('--f',c[3]);
+    b.innerHTML='<i></i><span>'+c[0]+'</span>';
+    b.addEventListener('click',function(){pick(i);});
+    row.appendChild(b);
+  });
+  pick(0);
+})();
+(function(){
+  var pk=document.getElementById('picker');
+  pk.addEventListener('click',function(e){
+    var b=e.target.closest('button[data-p]'); if(!b)return;
+    pk.querySelectorAll('button').forEach(function(o){o.setAttribute('aria-selected',o===b?'true':'false');});
+    ['a1','a2','a3','a4','a5'].forEach(function(id){document.getElementById(id).hidden=(id!==b.dataset.p);});
+    window.scrollTo({top:0});
+  });
+})();
+</script>
+</body>
+</html>

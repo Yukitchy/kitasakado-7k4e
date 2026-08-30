@@ -106,6 +106,16 @@
   .toc .tn{font-size:14px;font-weight:800;line-height:1.5;}
   .toc .ts{display:block;font-size:12px;color:var(--sub);font-weight:400;margin-top:1px;line-height:1.6;}
   .toc li.now .tn{color:var(--red);}
+  .sumcard{background:var(--card);border:2px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:10px;}
+  .sumcard .sh{font-size:13px;font-weight:800;color:var(--red);margin-bottom:6px;}
+  .sumcard p{font-size:14px;margin-bottom:10px;}
+  .sumcard .sh2{font-size:12px;font-weight:800;color:var(--sub);margin-bottom:4px;}
+  .sumcard ul{margin:0;padding-left:1.3em;font-size:14px;}
+  .modes{display:flex;gap:8px;margin:14px 0 4px;}
+  .modes[hidden]{display:none;}
+  .modes button{flex:1;padding:10px 8px;font-family:inherit;font-size:13px;font-weight:800;
+    background:var(--card);color:var(--sub);border:2px solid var(--line);border-radius:999px;cursor:pointer;}
+  .modes button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink);}
   #bknToggle{width:100%;padding:14px;font-family:inherit;font-size:15px;font-weight:800;
     background:var(--card);color:var(--ink);border:2px solid var(--line);border-radius:12px;cursor:pointer;}
   .bch{font-size:15px;font-weight:800;margin:28px 0 10px;padding-left:12px;border-left:5px solid var(--red);}
@@ -160,11 +170,26 @@
   <p class="note">※このページはURLを知っている3人だけの共有用です。拡散はしないでください。<br>話した内容：自己紹介／健康診断と尿酸値／睡眠サイクル論争／百名山98座／インバウンド／地元の昔の名店</p>
 
   <section id="bunko">
-    <h2>文庫版 全文書き起こし</h2>
+    <h2>文庫版</h2>
     <p class="lead">章をタップするとその場面から再生。本文の段落タップでも頭出しできます。</p>
+    <div class="sumcard">
+      <div class="sh">この回のまとめ</div>
+      <p>埼玉・北坂戸の地元の友達3人（いっちゃん・大場先生・タクマ）がバーミヤン北坂戸で第1回を収録。自己紹介から健康・登山・海外・地元の昔の名店までゆるく雑多に話した。</p>
+      <div class="sh2">決めたこと</div>
+      <ul>
+        <li>月1回バーミヤンに集まって収録する</li>
+        <li>番組タイトルは後日決定 → 「坂戸ベース」に確定済み。回のタイトルは下で投票中</li>
+      </ul>
+    </div>
     <ol id="toc" class="toc"></ol>
-    <button type="button" id="bknToggle">📖 全文を読む</button>
-    <div id="script" hidden></div>
+    <button type="button" id="bknToggle">📖 本文を読む</button>
+    <div id="script" hidden>
+      <div class="modes" id="modes" hidden>
+        <button type="button" data-m="c" aria-pressed="true">読み物（整文済み）</button>
+        <button type="button" data-m="r" aria-pressed="false">全文（原文ママ）</button>
+      </div>
+      <div id="bubbles"></div>
+    </div>
   </section>
 
   <section>
@@ -237,9 +262,15 @@
 (function(){
   var au = document.getElementById('ep');
   if (!au || !window.BUNKO) return;
-  var B = window.BUNKO, names = B.names, marks = B.marks || [];
+  var B = window.BUNKO, names = B.names;
   var toc = document.getElementById('toc'), box = document.getElementById('script'),
-      tg = document.getElementById('bknToggle');
+      tg = document.getElementById('bknToggle'),
+      bub = document.getElementById('bubbles'), modesRow = document.getElementById('modes');
+  var hasClean = !!(B.cturns && B.cturns.length);
+  var mode = hasClean ? 'c' : 'r';
+  if (hasClean) modesRow.hidden = false;
+  function curSet(){ return mode === 'c' && hasClean ? B.cturns : B.turns; }
+  function curMarks(){ return (mode === 'c' && hasClean ? B.cmarks : B.marks) || []; }
   var mini = document.getElementById('mini'), mBtn = document.getElementById('mBtn'),
       mSeek = document.getElementById('mSeek'), mCur = document.getElementById('mCur'),
       mDur = document.getElementById('mDur');
@@ -249,7 +280,7 @@
   function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
   function markup(t){
     var e = esc(t);
-    marks.forEach(function(m){
+    curMarks().forEach(function(m){
       var em = esc(m);
       e = e.split(em).join('<mark>' + em + '</mark>');
     });
@@ -282,11 +313,12 @@
     toc.appendChild(li);
   });
 
-  // 本文（初回展開時に一度だけ生成）
+  // 本文（展開時と読み物/全文の切替時に生成）
   function build(){
-    if (built) return; built = true;
+    built = true;
+    bub.innerHTML = ''; bbs = []; activeEl = null;
     var frag = document.createDocumentFragment(), ci = -1;
-    B.turns.forEach(function(tr){
+    curSet().forEach(function(tr){
       while (ci + 1 < B.chapters.length && tr[0] >= B.chapters[ci+1].t){
         ci++;
         var h = document.createElement('h3');
@@ -303,8 +335,17 @@
       bbs.push(d);
       frag.appendChild(d);
     });
-    box.appendChild(frag);
+    bub.appendChild(frag);
   }
+  modesRow.addEventListener('click', function(e){
+    var b = e.target.closest('button[data-m]');
+    if (!b || b.dataset.m === mode) return;
+    mode = b.dataset.m;
+    modesRow.querySelectorAll('button').forEach(function(o){
+      o.setAttribute('aria-pressed', o === b ? 'true' : 'false');
+    });
+    build();
+  });
   box.addEventListener('click', function(e){
     var b = e.target.closest('.bb');
     if (!b) return;
@@ -313,8 +354,8 @@
   });
   function setOpen(v){
     open = v; box.hidden = !v;
-    if (v) build();
-    tg.textContent = v ? '▲ 全文をとじる' : '📖 全文を読む';
+    if (v && !built) build();
+    tg.textContent = v ? '▲ 本文をとじる' : '📖 本文を読む';
     updMini();
   }
   tg.addEventListener('click', function(){ setOpen(!open); });
