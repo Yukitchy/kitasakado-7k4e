@@ -86,6 +86,13 @@
   textarea:focus,input[type=text]:focus{outline:none;border-color:var(--red);}
   textarea{min-height:100px;}
 
+  .logos{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+  .logos label{display:flex;flex-direction:column;gap:4px;align-items:center;cursor:pointer;
+    background:var(--card);border:2px solid var(--line);border-radius:12px;padding:10px 6px 8px;}
+  .logos label:has(input:checked){border-color:var(--red);background:#EEF3FF;}
+  .logos input{position:absolute;opacity:0;pointer-events:none;}
+  .logos img{width:100%;max-width:110px;display:block;}
+  .logos span{font-size:13px;font-weight:800;}
   .cal{background:var(--card);border:2px solid var(--line);border-radius:12px;padding:14px 12px;margin-bottom:10px;}
   .calnav{
     display:grid;grid-template-columns:40px 1fr 40px;align-items:center;
@@ -225,8 +232,7 @@
     <div id="script" hidden>
       <div class="modes" id="modes" hidden>
         <button type="button" data-m="d" aria-pressed="true">ダイジェスト</button>
-        <button type="button" data-m="c" aria-pressed="false">読み物</button>
-        <button type="button" data-m="r" aria-pressed="false">全文</button>
+        <button type="button" data-m="c" aria-pressed="false">読み物（全文整文）</button>
       </div>
       <div id="bubbles"></div>
     </div>
@@ -258,6 +264,19 @@
       <label><input type="radio" name="title" value="北坂戸に集合"><span class="n">10</span><span class="t">北坂戸に集合</span></label>
     </div>
     <input type="text" id="titleOwn" placeholder="自分で考えるならここに（任意）" style="margin-top:8px;">
+  </section>
+
+  <section>
+    <h2>ロゴの色 どれがいい？</h2>
+    <p class="lead">タップで1つ。形は確定済みで色だけ決めます。</p>
+    <div class="logos">
+      <label><input type="radio" name="logo" value="1 赤"><img src="img/logovote/1.png" alt="赤"><span>1 赤</span></label>
+      <label><input type="radio" name="logo" value="2 オレンジ"><img src="img/logovote/2.png" alt="オレンジ"><span>2 オレンジ</span></label>
+      <label><input type="radio" name="logo" value="3 東上線ブルー"><img src="img/logovote/3.png" alt="東上線ブルー"><span>3 東上線ブルー</span></label>
+      <label><input type="radio" name="logo" value="4 紺×オレンジ"><img src="img/logovote/4.png" alt="紺×オレンジ"><span>4 紺×オレンジ</span></label>
+      <label><input type="radio" name="logo" value="5 坂戸スカイ"><img src="img/logovote/5.png" alt="坂戸スカイ"><span>5 坂戸スカイ</span></label>
+      <label><input type="radio" name="logo" value="6 黄×黒"><img src="img/logovote/6.png" alt="黄×黒"><span>6 黄×黒</span></label>
+    </div>
   </section>
 
   <section>
@@ -565,10 +584,12 @@
 
   function state(){
     var t = document.querySelector('input[name=title]:checked');
+    var lg = document.querySelector('input[name=logo]:checked');
     var w = document.querySelector('.who button[aria-pressed=true]');
     return {
       who: w ? w.dataset.name : '',
       title: t ? t.value : '',
+      logo: lg ? lg.value : '',
       titleOwn: els.titleOwn.value,
       feedback: els.feedback.value,
       neta: els.neta.value,
@@ -592,6 +613,10 @@
       var r = document.querySelector('input[name=title][value="' + s.title.replace(/"/g,'\\"') + '"]');
       if (r) r.checked = true;
     }
+    if (s.logo) {
+      var lr = document.querySelector('input[name=logo][value="' + s.logo.replace(/"/g,'\\"') + '"]');
+      if (lr) lr.checked = true;
+    }
     ['titleOwn','feedback','neta','dateNote'].forEach(function(k){
       if (s[k]) els[k].value = s[k];
     });
@@ -611,7 +636,7 @@
       save();
     });
   });
-  document.querySelectorAll('input[name=title]').forEach(function(r){
+  document.querySelectorAll('input[name=title], input[name=logo]').forEach(function(r){
     r.addEventListener('change', save);
   });
   Object.keys(els).forEach(function(k){ els[k].addEventListener('input', save); });
@@ -621,6 +646,7 @@
     var lines = ['【坂戸ベース 第1回】' + (s.who || '')];
     var t = s.titleOwn ? s.titleOwn + '（自分で考えた案）' : s.title;
     if (t)          lines.push('▼タイトルはこれ\n' + t);
+    if (s.logo)     lines.push('▼ロゴの色\n' + s.logo);
     if (s.feedback) lines.push('▼感想\n' + s.feedback);
     if (s.neta)     lines.push('▼次回話したいネタ\n' + s.neta);
     if (s.dates && s.dates.length) {
