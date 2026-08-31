@@ -93,13 +93,9 @@
   textarea:focus,input[type=text]:focus{outline:none;border-color:var(--red);}
   textarea{min-height:100px;}
 
-  .logos{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
-  .logos label{display:flex;flex-direction:column;gap:6px;align-items:center;cursor:pointer;
-    background:var(--card);border:2px solid var(--line);border-radius:12px;padding:8px 8px 8px;}
-  .logos label:has(input:checked){border-color:var(--red);background:#EEF3FF;}
-  .logos input{position:absolute;opacity:0;pointer-events:none;}
-  .logos img{width:100%;display:block;border-radius:8px;}
-  .logos span{font-size:13px;font-weight:800;}
+  .cover{margin:0;background:var(--card);border:2px solid var(--red);border-radius:12px;padding:10px;}
+  .cover img{width:100%;display:block;border-radius:8px;}
+  .cover figcaption{font-size:13px;font-weight:800;text-align:center;margin-top:8px;}
   .fixed{
     background:var(--card);border:2px solid var(--red);border-radius:12px;
     padding:16px 18px;margin-bottom:10px;
@@ -276,7 +272,7 @@
         <div class="ld">9/29（火）17:00・ココス坂戸店。カレンダーに入れておいてください。</div>
       </li>
     </ol>
-    <div class="now">ここから2人にお願いしたいこと：下の「のりば」を上から順にタップして、ロゴの色とサブタイトルを選び、感想と次回のネタを書いてください。最後のボタンでLINEに貼る文ができます。</div>
+    <div class="now">ここから2人にお願いしたいこと：下の「のりば」を上から順にタップして、感想と次回のネタを書いてください。最後のボタンでLINEに貼る文ができます。</div>
   </div>
 
   <section id="bunko">
@@ -313,43 +309,12 @@
   </section>
 
   <section>
-    <h2>ロゴの色 どれがいい？</h2>
-    <p class="lead">Spotifyに出る正方形アートワーク（背景こみ）そのままの10案。タップで1つ。</p>
-    <div class="logos">
-      <label><input type="radio" name="logo" value="1 クリーム×赤"><img src="img/logovote/1.png" alt="クリーム×赤"><span>1 クリーム×赤</span></label>
-      <label><input type="radio" name="logo" value="2 クリーム×オレンジ"><img src="img/logovote/2.png" alt="クリーム×オレンジ"><span>2 クリーム×オレンジ</span></label>
-      <label><input type="radio" name="logo" value="3 生成り×紺"><img src="img/logovote/3.png" alt="生成り×紺"><span>3 生成り×紺</span></label>
-      <label><input type="radio" name="logo" value="4 ライトグレー×紺"><img src="img/logovote/4.png" alt="ライトグレー×紺"><span>4 ライトグレー×紺</span></label>
-      <label><input type="radio" name="logo" value="5 濃紺×オレンジ"><img src="img/logovote/5.png" alt="濃紺×オレンジ"><span>5 濃紺×オレンジ</span></label>
-      <label><input type="radio" name="logo" value="6 白×紺 オレンジ差し"><img src="img/logovote/6.png" alt="白×紺 オレンジ差し"><span>6 白×紺 オレンジ差し</span></label>
-      <label><input type="radio" name="logo" value="7 ロイヤルブルー×白"><img src="img/logovote/7.png" alt="ロイヤルブルー×白"><span>7 ロイヤルブルー×白</span></label>
-      <label><input type="radio" name="logo" value="8 黒×黄"><img src="img/logovote/8.png" alt="黒×黄"><span>8 黒×黄</span></label>
-      <label><input type="radio" name="logo" value="9 ベージュ×こげ茶"><img src="img/logovote/9.png" alt="ベージュ×こげ茶"><span>9 ベージュ×こげ茶</span></label>
-      <label><input type="radio" name="logo" value="10 オレンジ×紺"><img src="img/logovote/10.png" alt="オレンジ×紺"><span>10 オレンジ×紺</span></label>
-      <label><input type="radio" name="logo" value="11 からし×ディープグリーン"><img src="img/logovote/11.png" alt="からし×ディープグリーン"><span>11 からし×ディープグリーン</span></label>
-      <label><input type="radio" name="logo" value="12 テラコッタ×クリーム"><img src="img/logovote/12.png" alt="テラコッタ×クリーム"><span>12 テラコッタ×クリーム</span></label>
-      <label><input type="radio" name="logo" value="13 抹茶×朱"><img src="img/logovote/13.png" alt="抹茶×朱"><span>13 抹茶×朱</span></label>
-      <label><input type="radio" name="logo" value="14 ピンク×紺"><img src="img/logovote/14.png" alt="ピンク×紺"><span>14 ピンク×紺</span></label>
-      <label><input type="radio" name="logo" value="15 ターコイズ×濃紺"><img src="img/logovote/15.png" alt="ターコイズ×濃紺"><span>15 ターコイズ×濃紺</span></label>
-      <label><input type="radio" name="logo" value="16 パープル×イエロー"><img src="img/logovote/16.png" alt="パープル×イエロー"><span>16 パープル×イエロー</span></label>
-    </div>
-  </section>
-
-  <section>
-    <h2>サブタイトル どれがいい？</h2>
-    <p class="lead">番組名の後半。「厚木トーク｜厚木のしゃべり場」と同じ型です。タップで1つ。</p>
-    <div class="titles">
-      <label><input type="radio" name="subtitle" value="1 平成おじの雑談基地"><span class="n">1</span><span class="t">坂戸ベース｜平成おじの雑談基地</span></label>
-      <label><input type="radio" name="subtitle" value="2 平成おじのしゃべり場"><span class="n">2</span><span class="t">坂戸ベース｜平成おじのしゃべり場</span></label>
-      <label><input type="radio" name="subtitle" value="3 平成おじラジオ"><span class="n">3</span><span class="t">坂戸ベース｜平成おじラジオ</span></label>
-      <label><input type="radio" name="subtitle" value="4 平成おじのファミレス会議"><span class="n">4</span><span class="t">坂戸ベース｜平成おじのファミレス会議</span></label>
-      <label><input type="radio" name="subtitle" value="5 平成おじの帰省ラジオ"><span class="n">5</span><span class="t">坂戸ベース｜平成おじの帰省ラジオ</span></label>
-      <label><input type="radio" name="subtitle" value="6 北坂戸育ちの平成おじトーク"><span class="n">6</span><span class="t">坂戸ベース｜北坂戸育ちの平成おじトーク</span></label>
-      <label><input type="radio" name="subtitle" value="7 平成おじのドリンクバー放談"><span class="n">7</span><span class="t">坂戸ベース｜平成おじのドリンクバー放談</span></label>
-      <label><input type="radio" name="subtitle" value="8 平成おじの地元トーク"><span class="n">8</span><span class="t">坂戸ベース｜平成おじの地元トーク</span></label>
-      <label><input type="radio" name="subtitle" value="9 平成おじが集まる口実"><span class="n">9</span><span class="t">坂戸ベース｜平成おじが集まる口実</span></label>
-      <label><input type="radio" name="subtitle" value="10 平成おじの思い出の店めぐり"><span class="n">10</span><span class="t">坂戸ベース｜平成おじの思い出の店めぐり</span></label>
-    </div>
+    <h2>アートワーク、これで確定しました</h2>
+    <p class="lead">投票はもう大丈夫です。Spotifyに出ているのはこの絵で、番組カバーも第1回のサムネもこれに差し替え済みです。</p>
+    <figure class="cover">
+      <img src="img/cover-3000.png" alt="坂戸ベース 番組カバー：3人がビールで乾杯しているイラスト">
+      <figcaption>坂戸ベース｜平成おじの雑談ラジオ</figcaption>
+    </figure>
   </section>
 
   <section>
@@ -618,16 +583,11 @@
       save();
     });
   });
-  document.querySelectorAll('input[name=logo],input[name=subtitle]').forEach(function(r){
-    r.addEventListener('change', save);
-  });
   Object.keys(els).forEach(function(k){ els[k].addEventListener('input', save); });
 
   function buildText(){
     var s = state();
     var lines = ['【坂戸ベース 第1回】' + (s.who || '')];
-    if (s.logo)     lines.push('▼ロゴの色\n' + s.logo);
-    if (s.subtitle) lines.push('▼サブタイトル案\n' + s.subtitle);
     if (s.feedback) lines.push('▼感想\n' + s.feedback);
     if (s.neta)     lines.push('▼次回話したいネタ\n' + s.neta);
     lines.push('▼第2回\n9/29(火) 17:00〜 ココス坂戸店' + (s.dateNote ? '\n' + s.dateNote : ''));
