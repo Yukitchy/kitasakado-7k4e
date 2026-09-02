@@ -122,6 +122,25 @@
   }
   .picked.none{color:var(--sub);font-weight:400;background:var(--card);}
 
+
+  /* ---- 2人からの声 ---- */
+  .voices{margin:0 0 32px;}
+  .voices h2{font-size:19px;font-weight:900;margin-bottom:4px;}
+  .voices>.lead{margin-bottom:14px;}
+  .vcard{background:var(--card);border:2px solid var(--line);border-radius:12px;
+    padding:14px 16px;margin-bottom:10px;}
+  .vcard .vn{display:inline-block;background:var(--red);color:#fff;border-radius:8px;
+    padding:2px 10px;font-size:13px;font-weight:800;margin-bottom:10px;}
+  .vcard dt{font-size:12px;font-weight:800;color:var(--orange);letter-spacing:.06em;margin-top:10px;}
+  .vcard dt:first-of-type{margin-top:0;}
+  .vcard dd{font-size:15px;line-height:1.7;margin-top:2px;}
+  .vcard dd+dd{margin-top:4px;}
+  .vtodo{background:#EEF3FF;border:2px solid var(--red);border-radius:12px;
+    padding:12px 16px;font-size:14px;font-weight:700;}
+  .vtodo b{color:var(--red);}
+  .fnote{font-size:13px;font-weight:800;color:var(--red);
+    background:#EEF3FF;border-radius:8px;padding:8px 12px;margin-top:10px;}
+
   /* ---- 文庫版 ---- */
   .toc{background:var(--card);border:2px solid var(--line);border-radius:12px;padding:4px 0;list-style:none;margin-bottom:10px;}
   .toc li{border-top:1px solid var(--line);}
@@ -269,10 +288,48 @@
       </li>
       <li>
         <div class="lt">第2回の場所と日程を押さえた</div>
-        <div class="ld">9/29（火）17:00・ココス坂戸店。カレンダーに入れておいてください。</div>
+        <div class="ld">9/29（火）・ココス坂戸店。開始時刻は17:00か19:00で調整中です。</div>
       </li>
     </ol>
-    <div class="now">ここから2人にお願いしたいこと：下の「のりば」を上から順にタップして、感想と次回のネタを書いてください。最後のボタンでLINEに貼る文ができます。</div>
+    <div class="now">2人とも書いてくれました（すぐ下にまとめてあります）。追記や言い残しがあれば、下の「のりば」から足してください。最後のボタンでLINEに貼る文ができます。</div>
+  </div>
+
+
+  <div class="voices">
+    <h2>2人からの声（第1回を聴いて）</h2>
+    <p class="lead">9/2にLINEで届いた分。いっちゃんが下にまとめました。</p>
+
+    <div class="vcard">
+      <span class="vn">タクマ</span>
+      <dl>
+        <dt>感想</dt>
+        <dd>夜型の説明、あれタクマじゃなくていっちゃんでは？（→ 文庫版の第6章を直しました）</dd>
+        <dd>話が分散したので、次はテーマ少なめでもいいね。</dd>
+        <dt>次回話したいネタ</dt>
+        <dd>シルバーウィークに盛岡・台湾・タイ・韓国・大阪へ行く予定。</dd>
+        <dd>尿酸値は再検査の余地なしで「要治療」。さっさと病院に行くかも。</dd>
+        <dt>第2回について</dt>
+        <dd>大場先生の仕事もあるし19時スタートか？ 自分も忙しいタイミングかも。前日の出勤で様子を見て確認します。</dd>
+      </dl>
+    </div>
+
+    <div class="vcard">
+      <span class="vn">大場先生</span>
+      <dl>
+        <dt>感想</dt>
+        <dd>いっちゃんの話をちゃんと聞く機会がなかったので新鮮だった。</dd>
+        <dd>いっちゃんとタクマの「話すコミュ力」は見習うところが多い。</dd>
+        <dt>次回話したいネタ</dt>
+        <dd>地元を離れたいっちゃんの、地元との心の距離感。</dd>
+        <dd>一度離れて戻ってきたタクマの心境。</dd>
+        <dd>この番組の展望。</dd>
+        <dt>第2回について</dt>
+        <dd>9/29（火）17:00〜 ココス坂戸店でOK。</dd>
+      </dl>
+    </div>
+
+    <p class="vtodo">第2回の仕込み：テーマは<b>「地元との距離」1本</b>に絞る。<br>
+    開始時刻は<b>17:00か19:00か未確定</b>（タクマが前日の出勤で確認 → LINEで確定させる）。</p>
   </div>
 
   <section id="bunko">
@@ -310,13 +367,13 @@
 
   <section>
     <h2>聴いた感想</h2>
-    <p class="lead">「◯◯の話もっと聴きたい」だけでも十分。ここが一番ほしい。</p>
+    <p class="lead">追記があれば。「◯◯の話もっと聴きたい」だけでも十分。</p>
     <textarea id="feedback" placeholder="例：尿酸値のくだり、他人事じゃなくて笑った"></textarea>
   </section>
 
   <section>
     <h2>次回、話したいネタ</h2>
-    <p class="lead">思いつくだけ雑に。</p>
+    <p class="lead">上の分はもう入っています。追加で思いついたら雑に。</p>
     <textarea id="neta" placeholder="例：百名山ラスト1座の話をちゃんと聞きたい"></textarea>
   </section>
 
@@ -325,9 +382,10 @@
     <p class="lead">カレンダーに入れておいてください。</p>
     <div class="fixed">
       <div class="fd">9月29日<span>（火）</span></div>
-      <div class="ft">17:00 〜</div>
+      <div class="ft">17:00 〜 <small style="font-size:13px;font-weight:800;color:var(--sub);">（19:00案あり）</small></div>
       <div class="fp">ココス 坂戸店<span>埼玉県坂戸市片柳2171-1</span></div>
       <a class="fmap" href="https://www.google.com/maps/search/?api=1&amp;query=%E3%82%B3%E3%82%B3%E3%82%B9+%E5%9D%82%E6%88%B8%E5%BA%97" target="_blank" rel="noopener">地図をひらく</a>
+      <p class="fnote">開始時刻はまだ確定ではありません。タクマが前日の出勤で予定を確認 → LINEで17:00か19:00かを決めます。</p>
     </div>
     <input type="text" id="dateNote" placeholder="当日について何かあれば（例：少し遅れます）">
   </section>
